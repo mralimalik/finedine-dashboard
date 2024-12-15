@@ -4,10 +4,9 @@ import "./MenuSectionList.css";
 import SwitchButton from "../SwitchButton/SwitchButton.jsx";
 import AddMenuSectionItem from "../AddMenuSectionItemDropdown/AddMenuSectionItem.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
-import { Menu } from "../../../../backend/src/models/menu.model.js";
 const MenuSectionList = ({ sectionData, subSections, items }) => {
   const [isExpanded, setIsExpanded] = useState(false); // State for expansion
-  const [isActive, setIsActive] = useState(sectionData.isActive); // State for active/inactive toggle
+  const [isActive, setIsActive] = useState(sectionData.isActive); 
 
   const { openEditSectionSheet } = useContext(MenuContext);
   // Toggle expand/collapse

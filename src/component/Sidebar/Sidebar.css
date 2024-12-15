@@ -1,0 +1,32 @@
+.sidebar{
+    width: 350px;
+    height: 100vh;
+    background-color: rgb(255, 255, 255);
+    margin: 0px 2px 0px 0px;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1); /* Shadow to the right */
+}
+
+.sidebar-item {
+    padding: 14px 10px;
+    margin: 10px 0px;
+    font-weight: 300;
+    font-size: 16px;
+}
+.sidebar-item:hover{
+color: blueviolet;
+}
+
+.sidebar-item-selected{
+    color: blueviolet;
+    background-color: rgba(137, 43, 226, 0.068);
+}
+.venue-switch{
+    padding: 14px 10px;
+    font-weight: 500;
+    font-size: 18px;
+    background-color:#f0f2f5;
+}
+.venue-switch-selected{
+ color: white;
+ background-color: blueviolet;
+}

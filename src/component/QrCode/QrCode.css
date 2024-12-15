@@ -1,0 +1,8 @@
+.generated-qr-code{
+    height: 130px;
+    width: 130px;
+    padding: 10px;
+    border-radius: 2px;
+    border: 1px solid black;
+    background-color: white;
+}

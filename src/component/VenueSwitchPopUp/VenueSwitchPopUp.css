@@ -1,0 +1,31 @@
+.venue-pop-up {
+  padding: 8px;
+  margin: 10px;
+  height: 300px;
+  width: 250px;
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1); 
+  display: none;
+}
+.venue-pop-up-open {
+  display: block;
+}
+  
+
+.venue-add {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.venue-add:nth-child(2) {
+  color: blueviolet;
+}
+.venue-pop-up-item {
+  padding: 10px 8px;
+  margin: 10px 0px;
+}
+.venue-pop-up-item-selected {
+  color: blueviolet;
+  background-color: rgba(137, 43, 226, 0.068);
+}

@@ -1,0 +1,35 @@
+/* Style the toolbar container */
+.ql-container{
+  min-height: 100px; /* Minimum height of the editor */
+
+}
+
+
+.ql-toolbar {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Add styles for bold button */
+  .ql-bold {
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 3px;
+    padding: 5px;
+  }
+  
+  /* Add hover effects to all buttons */
+  .ql-toolbar button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Style italic button */
+  .ql-italic {
+    color: #007bff;
+    font-weight: bold;
+    border: 1px solid #007bff;
+    border-radius: 3px;
+  }
+
+  

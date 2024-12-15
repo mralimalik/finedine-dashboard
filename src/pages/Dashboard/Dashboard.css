@@ -1,0 +1,86 @@
+.main-dashboard {
+  padding: 20px;
+}
+.welcome-div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 15px 0px;
+}
+.date-text {
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.current-user-text {
+  font-size: 24px;
+  font-weight: 500;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.dashboard-qr-container {
+  border-radius: 12px;
+  /* height: 200px; */
+  background-color: white;
+  display: flex;
+  align-items: center;
+  margin: 20px 0px;
+  width: fit-content;
+  height: fit-content;
+  padding: 20px;
+  gap: 20px;
+  overflow: none;
+}
+.qr-text-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.qr-text-left h2 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+}
+.qr-text-left h4 {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+}
+
+.preview-button {
+  padding: 6px 12px;
+  background-color: blueviolet;
+  border-radius: 6px;
+  color: white;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  width: 100px;
+  text-align: center;
+}
+
+.phone-qr-position-div{
+display: flex;
+position: relative;
+width: 300px;
+/* background-color: red; */
+justify-content: end;
+
+}
+.scanme-image {
+  max-width: 120px;
+  max-height: 120px;
+  position: absolute;
+  left: -50px;
+  z-index: 1;
+}
+
+
+.qr-code-div{
+  position: absolute;
+  left: 80px;
+  top: 30px;
+}
+.phone-img {
+  max-width: 190px;
+  max-height: 190px;
+  
+}

@@ -1,0 +1,45 @@
+.table-container {
+    margin: 20px;
+  }
+  
+  .modifier-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .modifier-table th,
+  .modifier-table td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ddd;
+  }
+  
+  .modifier-table th {
+    background-color: #f1f1f1;
+  }
+  
+  .modifier-table td {
+    background-color: #fff;
+  }
+  
+  .checkbox-cell {
+    text-align: center;
+  }
+  
+  .checkbox-cell input {
+    cursor: pointer;
+  }
+  
+
+  .edit-delete button {
+    
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #fff;
+  }
+  
+  .purple-text {
+    color: #a3a0fc;
+  }
+  

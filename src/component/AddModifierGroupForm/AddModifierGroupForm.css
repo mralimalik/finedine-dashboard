@@ -1,0 +1,12 @@
+.table-model {
+  min-height: 50vh;
+  max-height: 72vh;
+
+  overflow-y: auto;
+}
+.table-model::-webkit-scrollbar {
+  display: none;
+}
+.main-dialog{
+    min-width: 60%;
+}

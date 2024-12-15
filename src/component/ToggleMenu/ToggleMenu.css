@@ -1,0 +1,84 @@
+/* Container for all elements */
+.toggle-menu-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+  }
+  
+  /* Toggle Switch */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 25px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 15px;
+  }
+  
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #4caf50;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(18px);
+  }
+  
+  /* Edit Menu Button */
+  .edit-menu-button {
+    background-color: #8e44ad;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .edit-menu-button .edit-icon {
+    font-size: 16px;
+  }
+  
+  /* Settings Icon */
+  .settings-icon {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  /* Menu Dots */
+  .menu-dots {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  

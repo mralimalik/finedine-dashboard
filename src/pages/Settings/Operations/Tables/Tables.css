@@ -1,0 +1,23 @@
+.add-area-div {
+  padding: 16px 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.download-qr-code-button-disable {
+  background-color: #f8f8f8;
+  color: rgba(182, 175, 175, 0.541);
+}
+.download-qr-code-button-enable {
+  color: rgba(19, 17, 17, 0.767);
+  cursor: pointer;
+}
+.download-qr-code-button-enable:hover {
+  color: rgba(137, 43, 226, 0.685);
+  border-color: rgba(137, 43, 226, 0.685);
+}
+.add-tables-button:hover{
+    background-color: blueviolet;
+    cursor: pointer;
+}

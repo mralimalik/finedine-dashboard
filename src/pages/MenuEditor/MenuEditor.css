@@ -1,0 +1,8 @@
+/* Make the list scrollable */
+.menu-scrollable {
+    height: 85vh; 
+    overflow-y: auto;
+  }
+  .menu-scrollable::-webkit-scrollbar {
+    display: none;
+  }

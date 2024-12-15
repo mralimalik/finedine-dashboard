@@ -1,0 +1,33 @@
+.main-menu-div{
+    padding: 20px;
+}
+
+
+.menu-heading-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.menu-heading-row h2{
+    font-weight: 500;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+}
+
+.create-menu-button{
+    padding: 6px 12px;
+    background-color: blueviolet;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+    border: none;
+    font-size: 14px;
+}
+
+.menutabs{
+    width:fit-content;
+    padding: 0px 8px;
+    height: 45px;
+
+}

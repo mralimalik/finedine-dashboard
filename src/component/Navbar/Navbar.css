@@ -1,0 +1,15 @@
+.navbar{
+    width: 100%;
+    background-color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+    align-items: center;
+}
+.account-avatar{
+    width: 40px;
+    height: 40px;
+    background-color: blueviolet;
+    border-radius: 100%;
+}

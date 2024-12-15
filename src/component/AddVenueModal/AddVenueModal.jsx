@@ -4,6 +4,7 @@ import { VenueContext } from "../../context/VenueContext.jsx";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../const/constants";
 const AddVenueModal = ({ isOpen, onClose }) => {
   // for venue modal dialog ref
   const { venueModalRef } = useContext(VenueContext);
@@ -29,7 +30,7 @@ const AddVenueModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/venue/createVenue",
+        `${baseUrl}/venue/createVenue`,
         { venueName, country },
         {
           headers: { Authorization: `Bearer ${token}` },

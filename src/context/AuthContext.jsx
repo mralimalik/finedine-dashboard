@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { baseUrl } from "../const/constants";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -49,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const fetchUserData = async (userToken) => {
     try {
-      const response = await axios.get("http://localhost:3000/user/", {
+      const response = await axios.get(`${baseUrl}/user/`, {
         headers: { Authorization: `Bearer ${userToken}` },
       });
       if (response.status === 200) {
@@ -81,7 +82,7 @@ export const AuthContextProvider = ({ children }) => {
   // Sign in function to call the API
   const signIn = async (email, password) => {
     try {
-      const response = await axios.post("http://localhost:3000/user/signin", {
+      const response = await axios.post( `${baseUrl}/user/signin`, {
         email,
         password,
       });

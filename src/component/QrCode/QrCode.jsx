@@ -3,7 +3,7 @@ import { QRCode } from "react-qr-code";
 import "./QrCode.css";
 import { AuthContext } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
-
+import { qrlink } from "../../const/constants";
 function QrCode() {
   const { selectedVenue } = useContext(AuthContext);
   const { venueId } = useParams();
@@ -45,7 +45,7 @@ function QrCode() {
         ref={qrCodeRef}
       >
         <QRCode
-          value={`https://qr-menu-7ie2.vercel.app/${selectedVenue?.venueId}`}
+          value={`${qrlink}${selectedVenue?.venueId}`}
           size={256}
           style={{ height: "auto", maxWidth: "100%", width: "100%" }}
           id="canvasqr"

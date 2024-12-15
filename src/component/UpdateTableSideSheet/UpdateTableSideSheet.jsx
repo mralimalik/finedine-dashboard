@@ -4,6 +4,7 @@ import { TableContext } from "../../context/TablesContext";
 import QRCode from "qrcode"; // Import the QRCode component
 import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
+import { qrlink } from "../../const/constants.js";
 const UpdateTableSheet = () => {
   const { setAreas, areas, toggleEditTableSheet, openTableEditSheet, tableToEdit } = useContext(TableContext);
   const { selectedVenue } = useContext(AuthContext);
@@ -142,7 +143,7 @@ const UpdateTableSheet = () => {
   const generateQRCode = async () => {
     try {
       const url = await QRCode.toDataURL(
-        `https://qr-menu-7ie2.vercel.app/${selectedVenue.venueId}?table=${tableToEdit._id}`,
+        `${qrlink}${selectedVenue.venueId}?table=${tableToEdit._id}`,
         {
           color: {
             dark: "#8A2BE2", // Blue-Violet color for the QR code

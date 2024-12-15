@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import QRCode from "qrcode"; // QR code library
 import JSZip from "jszip"; // Import JSZip library
-
+import { qrlink } from "../const/constants.js";
 export const TableContext = createContext();
 
 export const TableContextProvider = ({ children }) => {
@@ -195,7 +195,7 @@ export const TableContextProvider = ({ children }) => {
       // If the table exists, generate a QR code for it
       if (table) {
         // Construct the URL for the QR code with the venueId and tableId
-        const qrCodeUrl = `https://qr-menu-7ie2.vercel.app/${venueId}?table=${tableId}`;
+        const qrCodeUrl = `${qrlink}${venueId}?table=${tableId}`;
 
         // Create a new canvas element to render the QR code
         const canvas = document.createElement("canvas");

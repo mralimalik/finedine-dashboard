@@ -4,7 +4,7 @@ import { VenueContext } from "../../context/VenueContext.jsx";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../const/constants.js";
+import { baseUrl } from "../../const/constants.js";
 const AddVenueModal = ({ isOpen, onClose }) => {
   // for venue modal dialog ref
   const { venueModalRef } = useContext(VenueContext);

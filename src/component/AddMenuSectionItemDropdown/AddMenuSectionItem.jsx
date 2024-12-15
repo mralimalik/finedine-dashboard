@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { MenuContext } from "../../context/MenuContext";
-import { Menu } from "../../../../backend/src/models/menu.model";
 const AddMenuSectionItem = ({ parentId }) => {
   const [isAddDropDownVisible, setAddDropDownVisible] = useState(false);
   const dropdownRef = useRef(null);

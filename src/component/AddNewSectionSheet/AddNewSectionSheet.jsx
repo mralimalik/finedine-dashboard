@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Select from "react-select"; // Import React-Select
 import { MenuContext } from "../../context/MenuContext.jsx";
-import { Menu } from "../../../../backend/src/models/menu.model.js";
 const AddNewSectionSheet = ({}) => {
   const { menuId } = useParams();
   const { selectedVenue } = useContext(AuthContext);

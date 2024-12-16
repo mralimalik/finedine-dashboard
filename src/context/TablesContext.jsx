@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import QRCode from "qrcode"; // QR code library
 import JSZip from "jszip"; // Import JSZip library
-import { qrLink } from "../const/constants.js";
+import { qrlink } from "../const/constants.js";
 export const TableContext = createContext();
 
 export const TableContextProvider = ({ children }) => {

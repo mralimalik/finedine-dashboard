@@ -7,6 +7,7 @@ import { VenueContext } from "../../context/VenueContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import './ResponsiveVenuePopUp.css'
 const VenueSwitchPopUp = () => {
   // getting venue switch pop ref and other values
   const { showVeneueSwitchPopUp, venueSwitchRef } = useContext(SidebarContext);

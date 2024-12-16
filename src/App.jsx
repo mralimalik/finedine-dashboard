@@ -12,6 +12,7 @@ import { TableContextProvider } from "./context/TablesContext.jsx";
 import OperationMain from "./pages/Settings/Operations/OperationMain.jsx";
 import { ModifierContextProvider } from "./context/ModifierContext.jsx";
 import AllOrders from "./pages/Orders/AllOrders/AllOrders.jsx";
+import { OrderContextProvider } from "./context/OrderContext.jsx";
 import OrderSettings from "./pages/Orders/OrderSettings/OrderSettings.jsx";
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <MenuContextProvider>
               <ModifierContextProvider>
               <TableContextProvider>
+              <OrderContextProvider>
                 <Routes>
                   {/* Default Route */}
                   <Route path="/" element={<Navigate to="/login" replace />} />
@@ -44,6 +46,7 @@ function App() {
                   {/* Catch-all Route */}
                   <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>
+                </OrderContextProvider>
               </TableContextProvider>
               </ModifierContextProvider>
             

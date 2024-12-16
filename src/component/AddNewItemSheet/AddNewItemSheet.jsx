@@ -7,12 +7,13 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
 import Select from "react-select";
 import ItemModifierOptions from "../ItemModifierOptions/ItemModifierOptions.jsx";
+import './ResponsiveItemSheet.css'
 const AddNewItemSheet = () => {
   const [activeTab, setActiveTab] = useState("general");
 
   const { menuId } = useParams();
   const { selectedVenue } = useContext(AuthContext);
-
+  const [loading, setLoading] = useState(false);
   const {
     createItem,
     closeSectionSheet,
@@ -43,7 +44,8 @@ const AddNewItemSheet = () => {
   }, [editItemData]);
 
   return (
-    <div className="add-item-container">
+   <div className="item-bg">
+     <div className="add-item-container">
       <h3 className="text-lg font-medium border-y px-2 py-3">Add Item</h3>
       {/* Tabs */}
       <div className="tabs">
@@ -79,14 +81,25 @@ const AddNewItemSheet = () => {
         <button
           type="submit"
           className="add-button"
+          disabled={loading} // Disable button while loading
+
           onClick={() => {
-            createItem(menuId, selectedVenue);
+            if (loading === false) {
+              try {
+                setLoading(true);
+                createItem(menuId, selectedVenue);
+                setLoading(false);
+              } catch (e) {
+                setLoading(false);
+              }
+            }
           }}
         >
-          Add
+          {!loading ? "Add" : "Adding..."}
         </button>
       </div>
     </div>
+   </div>
   );
 };
 

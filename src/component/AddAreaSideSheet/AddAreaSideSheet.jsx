@@ -3,7 +3,7 @@ import Select from "react-select"; // Import React-Select
 import "./AddAreaSideSheet.css";
 import { TableContext } from "../../context/TablesContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
-
+import './ResponsiveAddAreaSheet.css'
 const AddAreaSideSheet = () => {
   const [areaName, setAreaName] = useState("");
   const [assignTables, setAssignTables] = useState([]);
@@ -30,6 +30,7 @@ const AddAreaSideSheet = () => {
   const handleSubmit = async () => {
     const assignedTableValues = assignTables.map((table) => table.value); 
     await createArea(areaName, selectedVenue._id,assignedTableValues);
+    toggleAreaSideSheet();
   };
 
   return (

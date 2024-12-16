@@ -1,8 +1,19 @@
-.main-page{
-    display: flex;
-}
+
 .sidebar-page{
     width: 100%;
     background-color:#f0f2f5;
     position: relative;
 }
+
+@media (max-width:1050px) {
+    .sidebar-responsive{
+        position: fixed;
+        z-index: 1000;
+        display: block;
+    }
+    .sidebar-static{
+        display: none;
+    }
+}
+
+

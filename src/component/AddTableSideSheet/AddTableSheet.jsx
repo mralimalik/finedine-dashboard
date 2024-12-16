@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import "./AddTableSheet.css";
 import { TableContext } from "../../context/TablesContext";
 import { AuthContext } from "../../context/AuthContext";
-
+import './ResponsiveAddTableSheet.css'
 const AddTableSheet = () => {
 
 

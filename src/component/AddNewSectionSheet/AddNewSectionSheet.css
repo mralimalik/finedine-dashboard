@@ -4,10 +4,12 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 40%;
+    width: 100%;
     height: fit-content;
   }
-  
+  .section-bg{
+ width: 40%;
+  }
   .tabs {
     display: flex;
     margin-bottom: 20px;

@@ -17,9 +17,9 @@
 }
 
 .card-left-div {
+
   gap: 10px;
   align-items: center;
-
   display: flex;
 }
 .menu-drag-handle-nograb {
@@ -63,4 +63,17 @@
 .menu-info-row {
   display: flex;
   gap: 10px;
+}
+
+ 
+@media (max-width: 1240px) {
+  .hide-orderinfo {
+    display: none;
+  }
+}
+
+@media (max-width: 1240px) {
+  .show-orderinfo {
+    display: flex;
+  }
 }

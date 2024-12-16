@@ -10,6 +10,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 0px 10px;
 }
 
 /* Modal container */
@@ -47,7 +48,7 @@
 .menu-option-div {
   border: 1px solid rgba(0, 0, 0, 0.226);
   border-radius: 5px;
-  padding: 30px 30px;
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;

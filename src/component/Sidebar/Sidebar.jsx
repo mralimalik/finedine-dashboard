@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import Logo from "../../assets/finedinemenu.webp";
 import "./Sidebar.css";
 
-const Sidebar = () => {
+const Sidebar = ({ isSidebarOpen }) => {
   let items = ["Dashboard", "Menu Management", "Operations", "Orders"];
 
   // State for managing Orders section expansion
@@ -15,7 +15,8 @@ const Sidebar = () => {
   const { selectedVenue } = useContext(AuthContext);
 
   // Getting selected item (route) index, handle venue switch popup from sidebar context
-  const { selectedItemIndex, setSelectedItemIndex, handleVenuePopUp } = useContext(SidebarContext);
+  const { selectedItemIndex, setSelectedItemIndex, handleVenuePopUp } =
+    useContext(SidebarContext);
 
   // To navigate to any route
   const navigate = useNavigate();
@@ -77,18 +78,18 @@ const Sidebar = () => {
       } else if (location.pathname.includes(`${venuePath}/operations`)) {
         setSelectedItemIndex(2); // Set "Operations" as selected
       } else if (location.pathname.includes(`${venuePath}/orders`)) {
-        setSelectedItemIndex(3); 
-      console.log("navigatig order");
+        setSelectedItemIndex(3);
+        console.log("navigatig order");
       }
       console.log("navigatig");
-
     }
   }, [location.pathname, setSelectedItemIndex, selectedVenue]);
 
   return (
-    <div className="sidebar">
-      <div className="image-log">
+    <div className={`sidebar `}>
+      <div className="image-log flex justify-between items-center pr-2">
         <img src={Logo} alt="" className="logo-img h-14 m-3" />
+        {/* <h3>Close</h3> */}
       </div>
 
       <div className="venue-switch" onClick={handleVenuePopUp}>

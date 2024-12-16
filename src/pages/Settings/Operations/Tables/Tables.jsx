@@ -23,7 +23,7 @@ const Tables = () => {
   return (
     <div className="mx-5 my-2 flex flex-col gap-6">
       <div className="search-add-table-div flex items-center justify-end gap-4">
-        <input type="text" className="rounded-md px-2 py-1 border-2" placeholder="Search Area" />
+        {/* <input type="text" className="rounded-md px-2 py-1 border-2" placeholder="Search Area" /> */}
         <div
           className={`download-qr-code-button-disable 
           border-2 px-2 py-1 rounded-md 

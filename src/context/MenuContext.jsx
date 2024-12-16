@@ -52,8 +52,8 @@ export const MenuContextProvider = ({ children }) => {
   };
 
   // updating section data in backend
-  const updateActiveSection = async (isActive) => {
-    const sectionId = editSectionData._id;
+  const updateActiveSection = async (isActive,sectionId) => {
+    // const sectionId = editSectionData._id;
     const apiUrl = `http://localhost:3000/menu/menusection/${sectionId}`;
     const token = localStorage.getItem("Token");
     try {
@@ -263,6 +263,7 @@ export const MenuContextProvider = ({ children }) => {
         modifiers,
         setModifiers,
         setShowSectionItemSheet,
+        updateActiveSection
       }}
     >
       {children}

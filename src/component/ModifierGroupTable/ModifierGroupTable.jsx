@@ -120,8 +120,8 @@ const ModifierGroupTable = () => {
                    .map((price) => price.name)
                    .join(", ")}
                </td>
-               <td>
-                 <span className="purple-text">{modifier.itemsUsed} items</span>
+               <td className="text-center"> 
+                 <span className="purple-text">{modifier.itemsUsed || 0 } items</span>
                </td>
                <td className="edit-delete">
                  <button onClick={() => handleEdit(modifier._id)}>✏️</button>

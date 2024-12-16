@@ -1,0 +1,18 @@
+@media (max-width:620px){
+    .scanme-image{
+        display: none;
+    }
+    .phome-img-div{
+        display: none;
+    }
+    .phone-qr-position-div{
+        position: static;
+        width: fit-content;
+    }
+    .qr-code-div{
+        position: static;
+    }
+    /* .qr-code-div{
+        left: 30px;
+    } */
+}

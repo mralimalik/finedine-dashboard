@@ -4,6 +4,7 @@ import ReuseTextField from "../../../../component/ReuseTextField/ReuseTextField.
 import { VenueContext } from "../../../../context/VenueContext.jsx";
 import axios from "axios";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
+import './ResponsiveExtraCharges.css'
 const ExtraCharges = () => {
   // Separate state for each type
   const [discountList, setDiscountList] = useState([]);
@@ -197,7 +198,7 @@ const ExtraCharges = () => {
   }, []);
 
   return (
-    <div className="bg-white shadow-lg rounded-md w-[500px] p-4 h-full ">
+    <div className="extra-charge-main-div bg-white shadow-lg rounded-md w-[500px] p-4 h-full ">
       {/* Discount Section */}
       <section className="pb-10 pt-2 border-b">
         <h3 className="text-lg font-medium mb-4">Discount</h3>

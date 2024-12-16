@@ -6,31 +6,33 @@ import { useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext.jsx";
 import axios from "axios";
 import { useEffect } from "react";
-
+import { OrderContext } from "../../../context/OrderContext.jsx";
 const OrderSettings = () => {
   const { selectedVenue } = useContext(AuthContext);
+  const { orderSettings,setOrderSettings } = useContext(OrderContext);
+
 
   const [activeTab, setActiveTab] = useState("dineIn");
-  const [orderSettings, setOrderSettings] = useState(null);
+  // const [orderSettings, setOrderSettings] = useState(null);
 
-  const getOrderSettings = async () => {
-    try {
-      const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
-      const response = await axios.get(url);
+  // const getOrderSettings = async () => {
+  //   try {
+  //     const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
+  //     const response = await axios.get(url);
 
-      if (response.status === 200) {
-        setOrderSettings(response.data?.data || {});
-        console.log(response.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching order settings:", error);
-    } finally {
-    }
-  };
+  //     if (response.status === 200) {
+  //       setOrderSettings(response.data?.data || {});
+  //       console.log(response.data.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching order settings:", error);
+  //   } finally {
+  //   }
+  // };
 
-  useEffect(() => {
-    getOrderSettings();
-  }, [selectedVenue]);
+  // useEffect(() => {
+  //   getOrderSettings();
+  // }, [selectedVenue]);
 
   return (
     <div>
@@ -56,7 +58,8 @@ const OrderSettings = () => {
           </button>
         </div>
       </div>
-      {activeTab === "dineIn" && (
+    <div className="w-2/5 order-setting-div">
+    {activeTab === "dineIn" && (
         <DineInOrderSettings
           dinInsettingsData={orderSettings?.settings?.dineIn}
           setOrderSettings={setOrderSettings}
@@ -68,6 +71,7 @@ const OrderSettings = () => {
           setOrderSettings={setOrderSettings}
         />
       )}
+    </div>
     </div>
   );
 };
@@ -106,7 +110,7 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
   };
 
   return (
-    <div className="w-2/5 bg-white m-3 p-4 rounded-md flex flex-col gap-5">
+    <div className=" bg-white m-3 p-4 rounded-md flex flex-col gap-5">
       <div className="flex justify-between items-center ">
         <h3>Enable Ordering</h3>
         <SwitchButton
@@ -177,7 +181,7 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
   };
 
   return (
-    <div className="w-2/5 bg-white m-3 p-4 rounded-md flex flex-col gap-5">
+    <div className=" bg-white m-3 p-4 rounded-md flex flex-col gap-5">
       <div className="flex justify-between items-center ">
         <h3>Enable Ordering</h3>
         <SwitchButton

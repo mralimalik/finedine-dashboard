@@ -4,7 +4,11 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],  theme: {
-    extend: {},
+    extend: {
+      screens: {
+        customMd900: '900px', // Custom breakpoint at 900px
+      }
+    },
   },
   plugins: [],
 }

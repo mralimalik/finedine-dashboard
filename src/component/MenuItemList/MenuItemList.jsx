@@ -21,9 +21,9 @@ const MenuItemList = ({ menuItemData }) => {
     <div
       className="menu-item-list bg-white rounded-md p-3 mx-8 my-4 flex justify-between items-center"
       draggable
-      onClick={() => {
-        toggleEditItemSheet(menuItemData);
-      }}
+      // onClick={() => {
+      //   toggleEditItemSheet(menuItemData);
+      // }}
     >
       {/* Left Section */}
       <div className="menu-item-left flex items-center gap-3">

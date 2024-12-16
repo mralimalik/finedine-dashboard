@@ -25,7 +25,7 @@ export const ModifierContextProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("Token");
       const response = await axios.get(
-        `http://localhost:3000/modifier/${venueId}`,
+        `http://localhost:3000/modifier/getmodifier/${venueId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

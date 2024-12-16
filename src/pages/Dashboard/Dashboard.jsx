@@ -6,12 +6,14 @@ import ScanMe from "../../assets/scanme.png";
 import Phone from "../../assets/phone.png";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useContext } from "react";
+import './ResponsiveDashboard.css'
+import { qrlink } from "../../const/constants.js";
 const Dashboard = () => {
   const currentDate = new Date();
   const formattedDate = format(currentDate, "EEEE, dd MMMM HH:mm");
   const { userData, selectedVenue } = useContext(AuthContext);
 
-  const previewLink = selectedVenue ? `https://qr-menu-7ie2.vercel.app/${selectedVenue?.venueId}` : "#";
+  const previewLink = selectedVenue ? `${qrlink}${selectedVenue?.venueId}` : "#";
   return (
     <div className="main-dashboard">
       <div className="welcome-div">

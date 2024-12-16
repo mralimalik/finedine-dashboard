@@ -88,8 +88,8 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="h-full w-full bg-black/50  fixed top-0 left-0 flex justify-center items-center ">
-      <div className="bg-white py-5 shadow-sm rounded-md main-dialog">
+    <div className="h-full w-full bg-black/50  fixed top-0 left-0 flex justify-center items-center">
+      <div className="bg-white py-5 shadow-sm rounded-md main-dialog mx-3">
         <header className="border-b px-5">
           <h3 className="font-semibold font-sans">Add Modifier Group</h3>
         </header>
@@ -116,7 +116,7 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
                   <tr key={index}>
                     <td>
                       <ReuseTextField
-                        className={"w-52"}
+                        className={"w-40"}
                         value={itemPrice.name}
                         onChange={(e) =>
                           handleInputChange(index, "name", e.target.value)

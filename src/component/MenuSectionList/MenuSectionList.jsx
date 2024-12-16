@@ -8,7 +8,7 @@ const MenuSectionList = ({ sectionData, subSections, items }) => {
   const [isExpanded, setIsExpanded] = useState(false); // State for expansion
   const [isActive, setIsActive] = useState(sectionData.isActive); 
 
-  const { openEditSectionSheet } = useContext(MenuContext);
+  const { openEditSectionSheet ,updateActiveSection} = useContext(MenuContext);
   // Toggle expand/collapse
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -48,10 +48,17 @@ const MenuSectionList = ({ sectionData, subSections, items }) => {
       );
     }
   };
- // Handle toggle for SwitchButton
- const handleToggle = () => {
-  setIsActive((prevIsActive) => !prevIsActive); // Toggle active/inactive state
-};
+  // Handle toggle for SwitchButton
+  const handleToggle = async () => {
+    const newIsActive = !isActive; // Determine new state
+    setIsActive(newIsActive); // Optimistic update
+    try {
+      await updateActiveSection(newIsActive, sectionData._id); // API call via context
+    } catch (error) {
+      console.error("Error updating section isActive:", error);
+      setIsActive(!newIsActive); // Revert state if API call fails
+    }
+  };
   return (
     <div>
       <div

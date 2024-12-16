@@ -3,11 +3,16 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 40%;
+    /* width: 40%; */
     height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+ 
+  .item-bg{
+ width: 40%;
   }
   
   .tabs {

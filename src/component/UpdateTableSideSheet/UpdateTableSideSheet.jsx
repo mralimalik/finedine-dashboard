@@ -171,12 +171,17 @@ const UpdateTableSheet = () => {
         tableName: tableToEdit.tableName || "",
         minSeats: tableToEdit.minSeats || 1,
         maxSeats: tableToEdit.maxSeats || 5,
-        onlineTableReservation: tableToEdit.onlineTableReservation || true,
+        onlineTableReservation: tableToEdit.onlineTableReservation ,
         areaId: tableToEdit.areaId || "",
         errors: {},
       });
+
+      console.log("sdfasdf",tableToEdit.onlineTableReservation);
+      
+      
       generateQRCode();
     }
+
   }, [tableToEdit]);
 
   if (!openTableEditSheet) return null;

@@ -5,7 +5,7 @@ const ToggleMenu = ({ isMenuActive, onToggle }) => {
   return (
     <div className="toggle-menu-container">
       {/* Toggle Switch */}
-      <label className="switch">
+      <label className="switch" onClick={(e) => e.stopPropagation()}>
         <input type="checkbox" checked={isMenuActive} onChange={onToggle} />
         <span className="slider"></span>
       </label>
@@ -16,7 +16,7 @@ const ToggleMenu = ({ isMenuActive, onToggle }) => {
       </button>
 
       {/* Settings Icon */}
-      <span className="settings-icon">⚙️</span>
+      {/* <span className="settings-icon">⚙️</span> */}
 
       {/* Menu Dots */}
       <span className="menu-dots">⋮</span>

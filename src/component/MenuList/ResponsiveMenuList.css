@@ -1,0 +1,11 @@
+@media (max-width:715px){
+    .card-div{
+        flex-direction: column;
+        align-items: start;
+    }
+    .toggle-menu-div{
+        width: 100%;
+        display: flex;
+        justify-content: end;
+    }
+}

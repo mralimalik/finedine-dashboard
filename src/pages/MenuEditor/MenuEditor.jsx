@@ -37,7 +37,7 @@ const MenuEditor = () => {
           return <MenuItemList key={section._id} menuItemData={section} />;
         })}
       </div>
-      {showSectionItemSheet === "SECTION" && <AddNewSectionSheet />}
+     {showSectionItemSheet === "SECTION" && <AddNewSectionSheet />}
       {showSectionItemSheet === "ITEM" && <AddNewItemSheet />}
     </div>
   );

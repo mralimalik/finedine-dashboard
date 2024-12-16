@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Select from "react-select"; // Import React-Select
 import { MenuContext } from "../../context/MenuContext.jsx";
+import './ResponsiveAddSectionSheet.css'
 const AddNewSectionSheet = ({}) => {
   const { menuId } = useParams();
   const { selectedVenue } = useContext(AuthContext);
@@ -276,7 +277,8 @@ const AddNewSectionSheet = ({}) => {
   }, [menuData, editSectionData]);
 
   return (
-    <div className="add-section-container">
+    <div className="section-bg ">
+        <div className="add-section-container">
       <h2>Add New Section</h2>
       <form
         onSubmit={(e) => {
@@ -383,6 +385,7 @@ const AddNewSectionSheet = ({}) => {
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 };

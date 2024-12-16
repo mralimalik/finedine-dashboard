@@ -4,7 +4,8 @@ import ReuseTextField from "../../../../component/ReuseTextField/ReuseTextField.
 import { VenueContext } from "../../../../context/VenueContext.jsx";
 import axios from "axios";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
-import './ResponsiveExtraCharges.css'
+import './ResponsiveExtraCharges.css';
+import { baseUrl } from "../../../../const/constants.js";
 const ExtraCharges = () => {
   // Separate state for each type
   const [discountList, setDiscountList] = useState([]);
@@ -133,7 +134,7 @@ const ExtraCharges = () => {
       try {
         // Send the request with the correct field name in the request body
         const response = await axios.post(
-          "http://localhost:3000/venue/delete/extraCharges",
+          `${baseUrl}/venue/delete/extraCharges`,
           { ids: removeCharges },
           {
             headers: {
@@ -154,7 +155,7 @@ const ExtraCharges = () => {
       const charges = [...discountList, ...serviceList, ...taxesList];
       // Send the request with the correct field name in the request body
       const response = await axios.post(
-        `http://localhost:3000/venue/extraCharges/${venueId}`,
+        `${baseUrl}/venue/extraCharges/${venueId}`,
         { charges },
         {
           headers: {
@@ -174,7 +175,7 @@ const ExtraCharges = () => {
   const getAllChargesData = async () => {
     const venueId = selectedVenue._id;
     const response = await axios.get(
-      `http://localhost:3000/venue/extraCharges/${venueId}`
+      `${baseUrl}/venue/extraCharges/${venueId}`
     );
     const data = response.data.data;
 

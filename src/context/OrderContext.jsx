@@ -1,6 +1,7 @@
 import { createContext,useState,useEffect,useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import { baseUrl } from "../const/constants";
 export const OrderContext = createContext();
 
 export const OrderContextProvider = ({ children }) => {
@@ -10,7 +11,7 @@ export const OrderContextProvider = ({ children }) => {
 
   const getOrderSettings = async (selectedVenue) => {
     try {
-      const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
+      const url = `${baseUrl}/order/settings/${selectedVenue._id}`;
       const response = await axios.get(url);
 
       if (response.status === 200) {

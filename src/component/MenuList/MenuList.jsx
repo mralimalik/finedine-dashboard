@@ -7,6 +7,7 @@ import { MenuContext } from "../../context/MenuContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../context/OrderContext.jsx";
 import "./ResponsiveMenuList.css";
+import { baseUrl } from "../../const/constants.js";
 const MenuList = () => {
   const navigate = useNavigate();
   const { setMenuItems, menuItems, formatDate } = useContext(MenuContext);
@@ -43,7 +44,7 @@ const MenuList = () => {
     try {
       const token = localStorage.getItem("Token");
       const response = await axios.get(
-        `http://localhost:3000/menu/${selectedVenue._id}`,
+        `${baseUrl}/menu/${selectedVenue._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -74,7 +75,7 @@ const MenuList = () => {
       // Make API call to update the isActive status
       const token = localStorage.getItem("Token");
       const response = await axios.patch(
-        `http://localhost:3000/menu/${selectedMenu._id}`,
+        `${baseUrl}/menu/${selectedMenu._id}`,
         { isActive: newIsActiveStatus }, // Send only the isActive field
         { headers: { Authorization: `Bearer ${token}` } }
       );

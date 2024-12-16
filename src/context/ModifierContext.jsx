@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
+import { baseUrl } from "../const/constants";
 
 export const ModifierContext = createContext();
 
@@ -25,7 +26,7 @@ export const ModifierContextProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("Token");
       const response = await axios.get(
-        `http://localhost:3000/modifier/getmodifier/${venueId}`,
+        `${baseUrl}/modifier/getmodifier/${venueId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -7,6 +7,7 @@ import "./AddModifierGroupForm.css";
 import { ModifierContext } from "../../context/ModifierContext";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { baseUrl } from "../../const/constants.js";
 const AddModifierGroupForm = ({ isOpen, onClose }) => {
   const {
     modifierPrices,
@@ -64,7 +65,7 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/modifier/${venueId}`,
+        `${baseUrl}/modifier/${venueId}`,
         {
           groupName: modifierGroupName,
           modifierPrices: modifierPrices,

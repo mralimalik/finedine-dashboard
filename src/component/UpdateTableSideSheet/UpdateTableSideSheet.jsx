@@ -4,7 +4,8 @@ import { TableContext } from "../../context/TablesContext";
 import QRCode from "qrcode"; // Import the QRCode component
 import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
-import { qrlink } from "../../const/constants.js";
+import { qrlink ,baseUrl} from "../../const/constants.js";
+
 const UpdateTableSheet = () => {
   const { setAreas, areas, toggleEditTableSheet, openTableEditSheet, tableToEdit } = useContext(TableContext);
   const { selectedVenue } = useContext(AuthContext);
@@ -89,7 +90,7 @@ const UpdateTableSheet = () => {
         console.log("running update table", tableToEdit._id, tableData.areaId);
 
         // API request to update the table
-        const response = await axios.put(`http://localhost:3000/table/update/${tableToEdit._id}`, tableData, {
+        const response = await axios.put(`${baseUrl}/table/update/${tableToEdit._id}`, tableData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

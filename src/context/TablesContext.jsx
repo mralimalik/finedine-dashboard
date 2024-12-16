@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import QRCode from "qrcode"; // QR code library
 import JSZip from "jszip"; // Import JSZip library
-import { qrlink } from "../const/constants.js";
+import { qrlink ,baseUrl} from "../const/constants.js";
 export const TableContext = createContext();
 
 export const TableContextProvider = ({ children }) => {
@@ -54,7 +54,7 @@ export const TableContextProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/table/createArea",
+          `${baseUrl}/table/createArea`,
         {
           areaName,
           venueId: venueId,
@@ -87,7 +87,7 @@ export const TableContextProvider = ({ children }) => {
   const fetchAreaWithTables = async (venueId) => {
     try {
       const token = localStorage.getItem("Token");
-      const response = await axios.get(`http://localhost:3000/table/${venueId}`, {
+      const response = await axios.get(`${baseUrl}/table/${venueId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAreas(response.data.data || []);
@@ -111,7 +111,7 @@ export const TableContextProvider = ({ children }) => {
 
       // Send data to the backend
       const response = await axios.post(
-        "http://localhost:3000/table/createAutomaticTable",
+         `${baseUrl}/table/createAutomaticTable`,
         tableData,
         config
       );
@@ -151,7 +151,7 @@ export const TableContextProvider = ({ children }) => {
       };
 
       // Send data to the backend
-      const response = await axios.post("http://localhost:3000/table/createCustomTable", tableData, config);
+      const response = await axios.post(`${baseUrl}/table/createCustomTable`, tableData, config);
 
       if (response.status === 200) {
         console.log("Tables created successfully:", response.data.data);

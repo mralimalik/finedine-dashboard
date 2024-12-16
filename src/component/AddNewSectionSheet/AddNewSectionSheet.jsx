@@ -6,7 +6,8 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Select from "react-select"; // Import React-Select
 import { MenuContext } from "../../context/MenuContext.jsx";
-import './ResponsiveAddSectionSheet.css'
+import './ResponsiveAddSectionSheet.css';
+import { baseUrl } from "../../const/constants.js";
 const AddNewSectionSheet = ({}) => {
   const { menuId } = useParams();
   const { selectedVenue } = useContext(AuthContext);
@@ -51,7 +52,7 @@ const AddNewSectionSheet = ({}) => {
     e.preventDefault();
     setLoading(true);
 
-    const apiUrl = `http://localhost:3000/menu/menusection/${menuId}`;
+    const apiUrl = `${baseUrl}/menu/menusection/${menuId}`;
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
 
@@ -125,7 +126,7 @@ const AddNewSectionSheet = ({}) => {
     setLoading(true);
     const sectionId = editSectionData._id;
     const oldParentId = editSectionData.parentId; // Existing parentId
-    const apiUrl = `http://localhost:3000/menu/menusection/${sectionId}`;
+    const apiUrl = `${baseUrl}/menu/menusection/${sectionId}`;
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
 

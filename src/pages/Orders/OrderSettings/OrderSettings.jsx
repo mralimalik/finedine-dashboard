@@ -7,6 +7,7 @@ import { AuthContext } from "../../../context/AuthContext.jsx";
 import axios from "axios";
 import { useEffect } from "react";
 import { OrderContext } from "../../../context/OrderContext.jsx";
+import { baseUrl } from "../../../const/constants.js";
 const OrderSettings = () => {
   const { selectedVenue } = useContext(AuthContext);
   const { orderSettings,setOrderSettings } = useContext(OrderContext);
@@ -90,7 +91,7 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
       };
 
       // Send update request to backend
-      const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
+      const url = `${baseUrl}/order/settings/${selectedVenue._id}`;
       const response = await axios.put(
         url,
         { type: "dineIn", updateData },
@@ -161,7 +162,7 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
       };
 
       // Send update request to backend
-      const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
+      const url = `${baseUrl}/order/settings/${selectedVenue._id}`;
       const response = await axios.put(
         url,
         { type: "delivery", updateData },

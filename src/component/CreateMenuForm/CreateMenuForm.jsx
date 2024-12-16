@@ -3,6 +3,7 @@ import "./CreateMenuForm.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { MenuContext } from "../../context/MenuContext";
+import { baseUrl } from "../../const/constants";
 const CreateMenuForm = ({ isOpen, onClose }) => {
   const { venueId } = useParams();
   const { setMenuItems } = useContext(MenuContext);
@@ -24,7 +25,7 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/menu/emptyMenu/${venueId}`,
+        `${baseUrl}/menu/emptyMenu/${venueId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -47,7 +48,7 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/menu/sampleMenu/${venueId}`,
+        `${baseUrl}/menu/sampleMenu/${venueId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

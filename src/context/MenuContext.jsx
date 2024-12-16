@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import { baseUrl } from "../const/constants.js";
 export const MenuContext = createContext();
 
 export const MenuContextProvider = ({ children }) => {
@@ -35,7 +35,7 @@ export const MenuContextProvider = ({ children }) => {
       console.log(menuId);
 
       const response = await axios.get(
-        `http://localhost:3000/menu/menuitems/${menuId}`,
+        `${baseUrl}/menu/menuitems/${menuId}`,
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +54,7 @@ export const MenuContextProvider = ({ children }) => {
   // updating section data in backend
   const updateActiveSection = async (isActive,sectionId) => {
     // const sectionId = editSectionData._id;
-    const apiUrl = `http://localhost:3000/menu/menusection/${sectionId}`;
+    const apiUrl = `${baseUrl}/menu/menusection/${sectionId}`;
     const token = localStorage.getItem("Token");
     try {
       const body = {
@@ -134,7 +134,7 @@ export const MenuContextProvider = ({ children }) => {
   };
 
   const createItem = async (menuId, selectedVenue) => {
-    const apiUrl = `http://localhost:3000/menu/menuitem/${menuId}`;
+    const apiUrl = `${baseUrl}/menu/menuitem/${menuId}`;
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
     console.log(price);

@@ -3,6 +3,7 @@ import "./ModifierGroupTable.css";
 import { ModifierContext } from "../../context/ModifierContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
+import { baseUrl } from "../../const/constants.js";
 const ModifierGroupTable = () => {
   const { allModifierData, setModifierData, fetchModifiersByVenue } =
     useContext(ModifierContext);
@@ -41,7 +42,7 @@ const ModifierGroupTable = () => {
 
       const token = localStorage.getItem("Token");
       const response = await axios.post(
-        "http://localhost:3000/modifier/delete",
+          `${baseUrl}/modifier/delete`,
       { modifierIds: selectedRows },
         {
           headers: {

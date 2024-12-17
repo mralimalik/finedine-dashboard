@@ -4,6 +4,8 @@ import "./MenuSectionList.css";
 import SwitchButton from "../SwitchButton/SwitchButton.jsx";
 import AddMenuSectionItem from "../AddMenuSectionItemDropdown/AddMenuSectionItem.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
+import { MdDragHandle } from "react-icons/md";
+
 const MenuSectionList = ({ sectionData, subSections, items }) => {
   const [isExpanded, setIsExpanded] = useState(false); // State for expansion
   const [isActive, setIsActive] = useState(sectionData.isActive); 
@@ -69,7 +71,7 @@ const MenuSectionList = ({ sectionData, subSections, items }) => {
         }}
       >
         <div className="menu-section-left flex gap-2">
-          <div className="menu-drag-handle-nograb">---</div>
+          <div className="menu-drag-handle-nograb flex items-center justify-center flex-col">{<MdDragHandle/>}</div>
           <p>{sectionData.sectionName}</p>
         </div>
         <div

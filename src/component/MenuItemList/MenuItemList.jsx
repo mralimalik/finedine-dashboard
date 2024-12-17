@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import SwitchButton from "../SwitchButton/SwitchButton.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
+import { MdDragHandle } from "react-icons/md";
+
 const MenuItemList = ({ menuItemData }) => {
   const { toggleEditItemSheet } = useContext(MenuContext);
   const [price, setPrice] = useState(menuItemData.price);
@@ -27,7 +29,7 @@ const MenuItemList = ({ menuItemData }) => {
     >
       {/* Left Section */}
       <div className="menu-item-left flex items-center gap-3">
-        <div className="menu-drag-handle-nograb">---</div>
+        <div className="menu-drag-handle-nograb">{<MdDragHandle/>}</div>
 
         <p>{menuItemData.itemName}</p>
       </div>

@@ -92,7 +92,7 @@ const Sidebar = ({ isSidebarOpen }) => {
         {/* <h3>Close</h3> */}
       </div>
 
-      <div className="venue-switch" onClick={handleVenuePopUp}>
+      <div className="venue-switch cursor-pointer" onClick={handleVenuePopUp}>
         <p>{selectedVenue ? selectedVenue.venueName : "Create Venue Here"}</p>
       </div>
 
@@ -101,13 +101,13 @@ const Sidebar = ({ isSidebarOpen }) => {
           <div
             className={`sidebar-item ${
               selectedItemIndex === index ? "sidebar-item-selected" : ""
-            } `}
+            } cursor-pointer`}
             onClick={() => handleItemClick(index, item)}
           >
             <p className="font-normal font-sans">{item}</p>
           </div>
           {item === "Orders" && isOrdersExpanded && (
-            <div className="sidebar-subitems">
+            <div className="sidebar-subitems cursor-pointer">
               <div
                 className={`sidebar-item ${
                   location.pathname.includes("all-orders")

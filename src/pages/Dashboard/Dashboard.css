@@ -83,3 +83,15 @@ justify-content: end;
   max-height: 190px;
   
 }
+.menu-preview-page::-webkit-scrollbar{
+  display: none;
+}
+
+
+
+
+@media (max-width:1250px) {
+  .responsive-div{
+flex-direction: column;
+  }
+}

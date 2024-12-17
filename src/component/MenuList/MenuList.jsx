@@ -9,6 +9,7 @@ import { OrderContext } from "../../context/OrderContext.jsx";
 import "./ResponsiveMenuList.css";
 import { baseUrl } from "../../const/constants.js";
 import { VenueContext } from "../../context/VenueContext.jsx";
+import { MdDragHandle } from "react-icons/md";
 const MenuList = () => {
   const navigate = useNavigate();
   const { setMenuItems, menuItems, formatDate } = useContext(MenuContext);
@@ -137,7 +138,7 @@ const MenuList = () => {
             onClick={() => handleMenuClick(data._id)}
           >
             <div className="card-left-div ">
-              <div className="menu-drag-handle-nograb">---</div>
+              <div className="menu-drag-handle-nograb">{<MdDragHandle/>}</div>
               <div className="menu-card-list">
                 <div className="title-row">
                   <p className="menu-title">{data.menuName}</p>

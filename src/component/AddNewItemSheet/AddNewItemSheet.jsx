@@ -7,12 +7,12 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
 import Select from "react-select";
 import ItemModifierOptions from "../ItemModifierOptions/ItemModifierOptions.jsx";
-import './ResponsiveItemSheet.css';
+import "./ResponsiveItemSheet.css";
 const AddNewItemSheet = () => {
   const [activeTab, setActiveTab] = useState("general");
 
   const { menuId } = useParams();
-  const { selectedVenue,setLoading } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
   const [loading, setItemLoading] = useState(false);
   const {
     createItem,
@@ -44,66 +44,67 @@ const AddNewItemSheet = () => {
   }, [editItemData]);
 
   return (
-   <div className="item-bg">
-     <div className="add-item-container">
-      <h3 className="text-lg font-medium border-y px-2 py-3">Add Item</h3>
-      {/* Tabs */}
-      <div className="tabs">
-        <button
-          className={`tab ${activeTab === "general" ? "active-tab" : ""}`}
-          onClick={() => setActiveTab("general")}
-        >
-          General Information
-        </button>
-        <button
-          className={`tab ${activeTab === "price" ? "active-tab" : ""}`}
-          onClick={() => setActiveTab("price")}
-        >
-          Price Options
-        </button>
-        <button
-          className={`tab ${activeTab === "modifier" ? "active-tab" : ""}`}
-          onClick={() => setActiveTab("modifier")}
-        >
-          Modifier Options
-        </button>
-      </div>
-      <div className="item-sheet-content">{renderContent()}</div>
+    <div className="item-bg">
+      <div className="add-item-container">
+        <h3 className="text-lg font-medium border-y px-2 py-3">Add Item</h3>
+        {/* Tabs */}
+        <div className="tabs">
+          <button
+            className={`tab ${activeTab === "general" ? "active-tab" : ""}`}
+            onClick={() => setActiveTab("general")}
+          >
+            General Information
+          </button>
+          <button
+            className={`tab ${activeTab === "price" ? "active-tab" : ""}`}
+            onClick={() => setActiveTab("price")}
+          >
+            Price Options
+          </button>
+          <button
+            className={`tab ${activeTab === "modifier" ? "active-tab" : ""}`}
+            onClick={() => setActiveTab("modifier")}
+          >
+            Modifier Options
+          </button>
+        </div>
+        <div className="item-sheet-content">{renderContent()}</div>
 
-      <div className="item-buttons">
-        <button
-          type="button"
-          className="cancel-button"
-          onClick={closeSectionSheet}
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="add-button"
-          disabled={loading} // Disable button while loading
+        <div className="item-buttons">
+          <button
+            type="button"
+            className="cancel-button"
+            onClick={closeSectionSheet}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="add-button"
+            disabled={loading} // Disable button while loading
+            onClick={() => {
+              if (loading === false) {
+                try {
+                  setLoading(true);
 
-          onClick={() => {
-            if (loading === false) {
-              try {
-                setItemLoading(true);
-                setLoading(true);
-                createItem(menuId, selectedVenue);
-                setItemLoading(false);
-              } catch (e) {
-                setItemLoading(false);
-              }finally{
-                setLoading(false);
-
+                  setItemLoading(true);
+                  createItem(menuId, selectedVenue);
+                  setItemLoading(false);
+                } catch (e) {
+                  setLoading(false);
+                  setItemLoading(false);
+                } finally {
+                  setLoading(false);
+                  setItemLoading(false);
+                }
               }
-            }
-          }}
-        >
-          {!loading ? "Add" : "Adding..."}
-        </button>
+            }}
+          >
+            {loading===false ? "Add" : "Adding..."}
+          </button>
+        </div>
       </div>
     </div>
-   </div>
   );
 };
 

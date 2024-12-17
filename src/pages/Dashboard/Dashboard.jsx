@@ -18,8 +18,9 @@ const Dashboard = () => {
     ? `${qrlink}${selectedVenue?.venueId}`
     : "#";
   return (
-    <div className="main-dashboard ">
-      <div className="welcome-div">
+    <div className="main-dashboard flex gap-3">
+   <div>
+   <div className="welcome-div">
         <p className="date-text">{formattedDate}</p>
         <p className="current-user-text">{userData.email},Welcome</p>
       </div>
@@ -74,8 +75,10 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        {selectedVenue && <PagePreview venueId={selectedVenue.venueId} />}
+   </div>
       </div>
+      {selectedVenue && <PagePreview venueId={selectedVenue.venueId} />}
+
     </div>
   );
 };

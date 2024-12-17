@@ -1,5 +1,6 @@
 .main-dashboard {
   padding: 20px;
+  
 }
 .welcome-div {
   display: flex;
@@ -91,7 +92,19 @@ justify-content: end;
 
 
 @media (max-width:1250px) {
-  .responsive-div{
+  .main-dashboard {
+flex-direction: column;
+  }
+}
+
+@media (max-width:1000px) {
+  .main-dashboard {
+flex-direction: row;
+  }
+}
+
+@media (max-width:940px) {
+  .main-dashboard {
 flex-direction: column;
   }
 }

@@ -181,6 +181,7 @@ export const MenuContextProvider = ({ children }) => {
   };
 
   const updateMenuItems = (newItem) => {
+   try{
     setMenuSectionsData((prevMenuData) => {
       const updatedMenuData = [...prevMenuData];
 
@@ -193,6 +194,9 @@ export const MenuContextProvider = ({ children }) => {
 
       return updatedMenuData;
     });
+   }catch(e){
+    
+   }
   };
 
   const addItemToSection = (sections, newItem) => {

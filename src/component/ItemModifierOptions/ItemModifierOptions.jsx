@@ -20,6 +20,11 @@ const ItemModifierOptions = () => {
 
       {modifiers.map((addedModifier, index) => (
         <div key={index} className="mb-3 flex items-center gap-3">
+        <div className="flex flex-col gap-1">
+        {index===0 && (
+          <h3 className="text-sm ">Modifier</h3>
+
+          )}
           <Select
             options={modifierOptions}
             placeholder="Select modifier"
@@ -35,7 +40,8 @@ const ItemModifierOptions = () => {
               setModifiers(updatedModifiers);
             }}
           />
-          <input
+       </div>
+          {/* <input
             type="number"
             placeholder="Min"
             value={addedModifier.min}
@@ -45,18 +51,24 @@ const ItemModifierOptions = () => {
               updatedModifiers[index].min = parseInt(e.target.value, 10) || 0;
               setModifiers(updatedModifiers);
             }}
-          />
-          <input
+          /> */}
+        <div className="flex flex-col gap-1">
+          {index===0 && (
+          <h3 className="text-sm ">Max</h3>
+
+          )}
+        <input
             type="number"
             placeholder="Max"
             value={addedModifier.max}
-            className="text-sm border rounded px-2 py-1 w-14"
+            className="text-sm border rounded px-2 py-1 w-14 "
             onChange={(e) => {
               const updatedModifiers = [...modifiers];
               updatedModifiers[index].max = parseInt(e.target.value, 10) || 0;
               setModifiers(updatedModifiers);
             }}
           />
+        </div>
           <label className="flex items-center text-sm">
             <input
               type="checkbox"

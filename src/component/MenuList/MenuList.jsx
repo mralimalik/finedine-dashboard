@@ -8,11 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../context/OrderContext.jsx";
 import "./ResponsiveMenuList.css";
 import { baseUrl } from "../../const/constants.js";
+import { VenueContext } from "../../context/VenueContext.jsx";
 const MenuList = () => {
   const navigate = useNavigate();
   const { setMenuItems, menuItems, formatDate } = useContext(MenuContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue,setLoading } = useContext(AuthContext);
   const { orderSettings } = useContext(OrderContext);
+
+  // const {setLoading} = useContext(VenueContext);
 
   const [draggedIndex, setDraggedIndex] = useState(null);
 
@@ -42,6 +45,7 @@ const MenuList = () => {
   // Fetch menus
   const fetchMenus = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("Token");
       const response = await axios.get(
         `${baseUrl}/menu/${selectedVenue._id}`,
@@ -52,8 +56,14 @@ const MenuList = () => {
       setMenuItems(response.data.data || []);
 
       console.log("response", response.data.data);
+      // setLoading(false);
+
     } catch (err) {
+      // setLoading(false);
+
       console.log(err);
+    }finally{
+      setLoading(false);
     }
   };
   // const handleMenuActive = async (index) => {
@@ -65,6 +75,7 @@ const MenuList = () => {
 
   const handleMenuActive = async (index) => {
     try {
+      setLoading(true);
       // Make a copy of the current menuItems
       const updatedMenus = [...menuItems];
       const selectedMenu = updatedMenus[index];
@@ -88,6 +99,9 @@ const MenuList = () => {
     } catch (error) {
       console.error("Error updating menu isActive:", error);
       alert("Failed to update menu. Please try again.");
+    }finally{
+      setLoading(false);
+
     }
   };
 

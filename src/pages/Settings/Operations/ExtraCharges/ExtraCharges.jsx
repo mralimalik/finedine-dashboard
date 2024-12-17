@@ -4,8 +4,9 @@ import ReuseTextField from "../../../../component/ReuseTextField/ReuseTextField.
 import { VenueContext } from "../../../../context/VenueContext.jsx";
 import axios from "axios";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
-import './ResponsiveExtraCharges.css';
+import "./ResponsiveExtraCharges.css";
 import { baseUrl } from "../../../../const/constants.js";
+import { toast } from "react-toastify";
 const ExtraCharges = () => {
   // Separate state for each type
   const [discountList, setDiscountList] = useState([]);
@@ -14,7 +15,7 @@ const ExtraCharges = () => {
 
   const [removeCharges, setRemoveCharges] = useState([]);
 
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue,setLoading } = useContext(AuthContext);
 
   // Generic function to add a new charge to a specific list
   const handleAdd = (type) => {
@@ -125,13 +126,14 @@ const ExtraCharges = () => {
 
   const handleSave = async () => {
     console.log("starting");
-
     const token = localStorage.getItem("Token");
     const venueId = selectedVenue._id;
 
     // Check if removeCharges is not empty
     if (removeCharges.length > 0) {
       try {
+        setLoading(true);
+
         // Send the request with the correct field name in the request body
         const response = await axios.post(
           `${baseUrl}/venue/delete/extraCharges`,
@@ -148,10 +150,14 @@ const ExtraCharges = () => {
       } catch (error) {
         // Handle any errors here
         console.error("Error deleting extra charges:", error);
+      } finally {
+        setLoading(false);
       }
     }
     console.log("after remvoe");
     try {
+      setLoading(true);
+
       const charges = [...discountList, ...serviceList, ...taxesList];
       // Send the request with the correct field name in the request body
       const response = await axios.post(
@@ -164,15 +170,21 @@ const ExtraCharges = () => {
         }
       );
       const data = response.data.data;
+      toast.success("Charges data saved");
       setDataInVariables(data);
 
       console.log("tehns toe remvoe");
     } catch (e) {
+      toast.error("Something went wrong");
       console.log("error", e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const getAllChargesData = async () => {
+   try{
+    setLoading(true);
     const venueId = selectedVenue._id;
     const response = await axios.get(
       `${baseUrl}/venue/extraCharges/${venueId}`
@@ -180,19 +192,28 @@ const ExtraCharges = () => {
     const data = response.data.data;
 
     setDataInVariables(data);
+   }catch(e){
+
+   }finally{
+    setLoading(false);
+
+   }
+
   };
 
-  const setDataInVariables = (data)=>{
-   // Filter and separate the data based on chargesType
-  const discountItems = data.filter(item => item.chargesType === 'DISCOUNT');
-  const serviceItems = data.filter(item => item.chargesType === 'SERVICE');
-  const taxesItems = data.filter(item => item.chargesType === 'TAXES');
+  const setDataInVariables = (data) => {
+    // Filter and separate the data based on chargesType
+    const discountItems = data.filter(
+      (item) => item.chargesType === "DISCOUNT"
+    );
+    const serviceItems = data.filter((item) => item.chargesType === "SERVICE");
+    const taxesItems = data.filter((item) => item.chargesType === "TAXES");
 
-  // Update the state lists with the filtered data
-  setDiscountList(discountItems);
-  setServiceList(serviceItems);
-  setTaxesList(taxesItems);  
-  }
+    // Update the state lists with the filtered data
+    setDiscountList(discountItems);
+    setServiceList(serviceItems);
+    setTaxesList(taxesItems);
+  };
 
   useEffect(() => {
     getAllChargesData();

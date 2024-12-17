@@ -5,12 +5,13 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../const/constants.js";
+import { toast } from "react-toastify";
 const AddVenueModal = ({ isOpen, onClose }) => {
   // for venue modal dialog ref
   const { venueModalRef } = useContext(VenueContext);
 
   // getting all venues, selected current venue, seting current venue
-  const { setUserVenues, selectedVenue, userVenues, setSelectedVenue } = useContext(AuthContext);
+  const { setUserVenues, selectedVenue, userVenues, setSelectedVenue,setLoading } = useContext(AuthContext);
 
   const [venueName, setVenueName] = useState("");
   const [country, setCountry] = useState("");
@@ -29,6 +30,7 @@ const AddVenueModal = ({ isOpen, onClose }) => {
     const token = localStorage.getItem("Token");
 
     try {
+      setLoading(true);
       const response = await axios.post(
         `${baseUrl}/venue/createVenue`,
         { venueName, country },
@@ -51,10 +53,15 @@ const AddVenueModal = ({ isOpen, onClose }) => {
           //after setting then navigate with venueId
           navigate(`/venue/${response.data.data.venueId}/dashboard`);
         }
+        toast.success("Venue created successfully");
         onClose();
       }
     } catch (err) {
+      toast.error("Something went wrong");
       console.log("Error creating venue:", err);
+    }finally{
+      setLoading(false);
+
     }
   };
   if (!isOpen) return null;

@@ -9,14 +9,28 @@ import AddMenuSectionItem from "../../component/AddMenuSectionItemDropdown/AddMe
 import AddNewSectionSheet from "../../component/AddNewSectionSheet/AddNewSectionSheet.jsx";
 import AddNewItemSheet from "../../component/AddNewItemSheet/AddNewItemSheet.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 const MenuEditor = () => {
   const { menuData, setMenuSectionsData, getMenuesItemsandSections } = useContext(MenuContext);
   const { showSectionItemSheet,setShowSectionItemSheet } = useContext(MenuContext);
   const { menuId } = useParams();
+  const {setLoading} =  useContext(AuthContext);
+
+  const handleFetchItems = async()=>{
+    try{
+      setLoading(true);
+   await getMenuesItemsandSections(menuId);
+    }catch(e){
+
+    }finally{
+      setLoading(false);
+    }
+
+  }
 
   useEffect(() => {
     setShowSectionItemSheet(null);
-    getMenuesItemsandSections(menuId);
+    handleFetchItems();
   }, []);
 
   return (

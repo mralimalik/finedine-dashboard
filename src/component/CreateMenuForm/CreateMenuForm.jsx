@@ -4,11 +4,14 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { MenuContext } from "../../context/MenuContext";
 import { baseUrl } from "../../const/constants";
+import { VenueContext } from "../../context/VenueContext";
+import { AuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 const CreateMenuForm = ({ isOpen, onClose }) => {
   const { venueId } = useParams();
   const { setMenuItems } = useContext(MenuContext);
   const [selectedOption, setSelectedOption] = useState(null);
-
+  const { setLoading } = useContext(AuthContext);
 
   const menuOptions = [
     { title: "Start From Scratch", des: "Start with an empty menu" },
@@ -24,6 +27,7 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
     const token = localStorage.getItem("Token");
 
     try {
+      setLoading(true);
       const response = await axios.post(
         `${baseUrl}/menu/emptyMenu/${venueId}`,
         {},
@@ -36,10 +40,14 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
       if (response.data?.data) {
         console.log("Menu created successfully:", response.data.data);
         setMenuItems((prev) => [...(prev || []), response.data.data]);
+        toast.success("Menu Added");
         onClose();
       }
     } catch (err) {
+      toast.error("Something went wrong");
       console.log("Error creating menu with no item:", err);
+    } finally {
+      setLoading(false);
     }
   };
   const createSampleMenuWithItem = async () => {
@@ -47,6 +55,8 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
     const token = localStorage.getItem("Token");
 
     try {
+      setLoading(true);
+
       const response = await axios.post(
         `${baseUrl}/menu/sampleMenu/${venueId}`,
         {},
@@ -59,10 +69,14 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
       if (response.data?.data) {
         console.log("Menu created successfully:", response.data.data);
         setMenuItems((prev) => [...(prev || []), response.data.data]);
+        toast.success("Menu Added");
         onClose();
       }
     } catch (err) {
+      toast.error("Something went wrong");
       console.log("Error creating menu with no item:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,7 +99,9 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
           {menuOptions.map((item, index) => (
             <div
               key={index}
-              className={`menu-option-div ${selectedOption === index ? "menu-option-div-selected" : ""}`}
+              className={`menu-option-div ${
+                selectedOption === index ? "menu-option-div-selected" : ""
+              }`}
               onClick={() => {
                 handleOptionClick(index);
               }}
@@ -99,7 +115,11 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
           <button type="button" className="cancel-button" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className="add-button" onClick={handleContinueTap}>
+          <button
+            type="submit"
+            className="add-button"
+            onClick={handleContinueTap}
+          >
             Continue
           </button>
         </div>

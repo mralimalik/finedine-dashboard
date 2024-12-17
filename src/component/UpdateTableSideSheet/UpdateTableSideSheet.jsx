@@ -4,11 +4,18 @@ import { TableContext } from "../../context/TablesContext";
 import QRCode from "qrcode"; // Import the QRCode component
 import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
-import { qrlink ,baseUrl} from "../../const/constants.js";
+import { qrlink, baseUrl } from "../../const/constants.js";
+import { toast } from "react-toastify";
 
 const UpdateTableSheet = () => {
-  const { setAreas, areas, toggleEditTableSheet, openTableEditSheet, tableToEdit } = useContext(TableContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const {
+    setAreas,
+    areas,
+    toggleEditTableSheet,
+    openTableEditSheet,
+    tableToEdit,
+  } = useContext(TableContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   const [table, setTable] = useState({
     tableName: "",
@@ -24,7 +31,10 @@ const UpdateTableSheet = () => {
   const handleInputChange = (field, value) => {
     setTable((prevTable) => ({
       ...prevTable,
-      [field]: field === "minSeats" || field === "maxSeats" ? parseInt(value, 10) || "" : value,
+      [field]:
+        field === "minSeats" || field === "maxSeats"
+          ? parseInt(value, 10) || ""
+          : value,
       errors: { ...prevTable.errors, [field]: "" }, // Reset specific field error
     }));
   };
@@ -77,6 +87,7 @@ const UpdateTableSheet = () => {
   const handleSubmit = async () => {
     if (validateFields()) {
       try {
+        setLoading(true);
         const token = localStorage.getItem("Token");
         // Prepare data to be sent in the request
         const tableData = {
@@ -90,19 +101,27 @@ const UpdateTableSheet = () => {
         console.log("running update table", tableToEdit._id, tableData.areaId);
 
         // API request to update the table
-        const response = await axios.put(`${baseUrl}/table/update/${tableToEdit._id}`, tableData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.put(
+          `${baseUrl}/table/update/${tableToEdit._id}`,
+          tableData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         console.log("after running update table");
 
         const newUpdatedTable = response.data.data;
         console.log("Table updated successfully:", response.data.data);
         updateAreasWithTable(newUpdatedTable);
+        toast.success("Table Updated");
         toggleEditTableSheet();
       } catch (error) {
+        toast.error("Something went wrong");
         console.error("Error updating table:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -118,28 +137,31 @@ const UpdateTableSheet = () => {
       }
       return area; // Return other areas unchanged
     });
-  
+
     // If areaId changed, remove the table from the old area and add it to the new one
     if (tableToEdit.areaId !== updatedTable.areaId) {
       // Remove from old area
-      const oldAreaIndex = updatedAreas.findIndex((area) => area._id === tableToEdit.areaId);
+      const oldAreaIndex = updatedAreas.findIndex(
+        (area) => area._id === tableToEdit.areaId
+      );
       if (oldAreaIndex !== -1) {
-        updatedAreas[oldAreaIndex].tables = updatedAreas[oldAreaIndex].tables.filter(
-          (table) => table._id !== updatedTable._id
-        );
+        updatedAreas[oldAreaIndex].tables = updatedAreas[
+          oldAreaIndex
+        ].tables.filter((table) => table._id !== updatedTable._id);
       }
-  
+
       // Add to new area
-      const newAreaIndex = updatedAreas.findIndex((area) => area._id === updatedTable.areaId);
+      const newAreaIndex = updatedAreas.findIndex(
+        (area) => area._id === updatedTable.areaId
+      );
       if (newAreaIndex !== -1) {
         updatedAreas[newAreaIndex].tables.push(updatedTable); // Add the table to the new area
       }
     }
-  
+
     // Update the state with the modified areas
     setAreas(updatedAreas);
   };
-  
 
   const generateQRCode = async () => {
     try {
@@ -172,17 +194,15 @@ const UpdateTableSheet = () => {
         tableName: tableToEdit.tableName || "",
         minSeats: tableToEdit.minSeats || 1,
         maxSeats: tableToEdit.maxSeats || 5,
-        onlineTableReservation: tableToEdit.onlineTableReservation ,
+        onlineTableReservation: tableToEdit.onlineTableReservation,
         areaId: tableToEdit.areaId || "",
         errors: {},
       });
 
-      console.log("sdfasdf",tableToEdit.onlineTableReservation);
-      
-      
+      console.log("sdfasdf", tableToEdit.onlineTableReservation);
+
       generateQRCode();
     }
-
   }, [tableToEdit]);
 
   if (!openTableEditSheet) return null;
@@ -217,7 +237,9 @@ const UpdateTableSheet = () => {
                 value={table.tableName}
                 onChange={(e) => handleInputChange("tableName", e.target.value)}
               />
-              {table.errors.tableName && <span className="error-text">{table.errors.tableName}</span>}
+              {table.errors.tableName && (
+                <span className="error-text">{table.errors.tableName}</span>
+              )}
             </div>
 
             <div>
@@ -234,7 +256,9 @@ const UpdateTableSheet = () => {
                   </option>
                 ))}
               </select>
-              {table.errors.areaId && <span className="error-text">{table.errors.areaId}</span>}
+              {table.errors.areaId && (
+                <span className="error-text">{table.errors.areaId}</span>
+              )}
             </div>
 
             <div className="table-info">
@@ -244,9 +268,13 @@ const UpdateTableSheet = () => {
                   type="number"
                   className="form-input"
                   value={table.minSeats}
-                  onChange={(e) => handleInputChange("minSeats", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("minSeats", e.target.value)
+                  }
                 />
-                {table.errors.minSeats && <span className="error-text">{table.errors.minSeats}</span>}
+                {table.errors.minSeats && (
+                  <span className="error-text">{table.errors.minSeats}</span>
+                )}
               </div>
 
               <div>
@@ -255,14 +283,20 @@ const UpdateTableSheet = () => {
                   type="number"
                   className="form-input"
                   value={table.maxSeats}
-                  onChange={(e) => handleInputChange("maxSeats", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("maxSeats", e.target.value)
+                  }
                 />
-                {table.errors.maxSeats && <span className="error-text">{table.errors.maxSeats}</span>}
+                {table.errors.maxSeats && (
+                  <span className="error-text">{table.errors.maxSeats}</span>
+                )}
               </div>
             </div>
 
             <div className="form-group toggle-container py-3">
-              <label className="toggle-label">Available for Online Reservation</label>
+              <label className="toggle-label">
+                Available for Online Reservation
+              </label>
               <input
                 type="checkbox"
                 className="toggle-switch"

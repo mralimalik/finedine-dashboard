@@ -8,6 +8,8 @@ import { ModifierContext } from "../../context/ModifierContext";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { baseUrl } from "../../const/constants.js";
+import { VenueContext } from "../../context/VenueContext.jsx";
+import { toast } from "react-toastify";
 const AddModifierGroupForm = ({ isOpen, onClose }) => {
   const {
     modifierPrices,
@@ -15,10 +17,10 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
     allModifierData,
     setModifierData,
   } = useContext(ModifierContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue ,setLoading} = useContext(AuthContext);
 
   const [modifierGroupName, setGroupName] = useState("");
-
+//  const {setLoading} = useContext(VenueContext);
   const handleInputChange = (index, field, value) => {
     const updatedPrice = [...modifierPrices];
 
@@ -64,6 +66,7 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post(
         `${baseUrl}/modifier/${venueId}`,
         {
@@ -80,11 +83,15 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
       if (response.status === 200) {
         console.log("Modifier Group added successfully:", response.data.data);
       setModifierData((prevState) => [...prevState, response.data.data]);
+      toast.success( `${modifierGroupName} modifier added successfully`)
         onClose();
       }
     } catch (error) {
+      toast.error("Something went wrong")
       console.error("Error adding modifier group:", error);
       alert("Failed to add modifier group. Please try again.");
+    }finally{
+      setLoading(false);
     }
   };
 

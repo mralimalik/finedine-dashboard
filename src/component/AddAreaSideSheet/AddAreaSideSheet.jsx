@@ -11,7 +11,7 @@ const AddAreaSideSheet = () => {
   const [tableOptions, setTableOptions] = useState([]); // Dynamic table options
 
   const { isAreaSheetOpen, toggleAreaSideSheet, createArea, areas } = useContext(TableContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue,setLoading } = useContext(AuthContext);
 
   // Transform the areas data into the structure for React-Select
   useEffect(() => {
@@ -28,9 +28,17 @@ const AddAreaSideSheet = () => {
   }, [areas]);
 
   const handleSubmit = async () => {
+   try{
+    setLoading(true);
+
     const assignedTableValues = assignTables.map((table) => table.value); 
     await createArea(areaName, selectedVenue._id,assignedTableValues);
     toggleAreaSideSheet();
+   }catch(e){
+
+   }finally{
+    setLoading(false);
+   }
   };
 
   return (

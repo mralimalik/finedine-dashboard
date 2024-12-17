@@ -2,9 +2,14 @@ import { useState, useEffect, createContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../const/constants.js";
+import { toast } from "react-toastify";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
+
+ // to set loading while performing any api call
+ const [loading, setLoading] = useState(false);
+
   // for storing current user data
   const [userData, setUserData] = useState({});
 
@@ -35,6 +40,7 @@ export const AuthContextProvider = ({ children }) => {
   // getting user token from local and fetching data from api , if error in token then go to login
   const getUserDataLocal = async () => {
     try {
+      setLoading(true);
       const userToken = localStorage.getItem("Token");
       if (userToken) {
         setToken(userToken);
@@ -45,6 +51,9 @@ export const AuthContextProvider = ({ children }) => {
     } catch (error) {
       console.error("Error retrieving user token:", error);
       navigate("/login");
+    }finally{
+      setLoading(false);
+
     }
   };
 
@@ -66,7 +75,6 @@ export const AuthContextProvider = ({ children }) => {
         } else {
           navigate(`/venue/dashboard`);
         }
-
         console.log("navigating to dashaoad after getting");
       }
     } catch (err) {
@@ -94,8 +102,10 @@ export const AuthContextProvider = ({ children }) => {
         } else {
           navigate(`/venue/dashboard`);
         }
+        toast.success("Logged In")
       }
     } catch (err) {
+      toast.error("Something went wrong");
       throw err.response?.data?.message || "An error occurred during sign-in.";
     }
   };
@@ -113,6 +123,8 @@ export const AuthContextProvider = ({ children }) => {
         selectedVenue,
         userData,
         setSelectedVenue,
+        loading,
+        setLoading
       }}
     >
       {children}

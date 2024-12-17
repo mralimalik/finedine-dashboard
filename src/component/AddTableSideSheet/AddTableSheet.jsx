@@ -2,14 +2,8 @@ import React, { useState, useContext } from "react";
 import "./AddTableSheet.css";
 import { TableContext } from "../../context/TablesContext";
 import { AuthContext } from "../../context/AuthContext";
-import './ResponsiveAddTableSheet.css'
+import "./ResponsiveAddTableSheet.css";
 const AddTableSheet = () => {
-
-
-
-
-
-
   const [tableBoxes, setTableBoxes] = useState([
     {
       tableName: "",
@@ -23,8 +17,14 @@ const AddTableSheet = () => {
     },
   ]);
   const [mode, setMode] = useState("custom");
-  const { areas, createAutomaticTables, createCustomTables,toggleAddTableSheet,openTableAddSheet } = useContext(TableContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const {
+    areas,
+    createAutomaticTables,
+    createCustomTables,
+    toggleAddTableSheet,
+    openTableAddSheet,
+  } = useContext(TableContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   const handleAddTableBox = () => {
     if (mode === "custom") {
@@ -47,7 +47,10 @@ const AddTableSheet = () => {
   const handleInputChange = (index, field, value) => {
     const updatedTableBoxes = [...tableBoxes];
     updatedTableBoxes[index][field] =
-      field === "numberOfTables" || field === "startingFrom" || field === "minSeats" || field === "maxSeats"
+      field === "numberOfTables" ||
+      field === "startingFrom" ||
+      field === "minSeats" ||
+      field === "maxSeats"
         ? value
           ? parseInt(value)
           : 0
@@ -88,15 +91,23 @@ const AddTableSheet = () => {
 
       if (!table.tableName.trim()) errors.tableName = "Table name is required.";
       if (!table.areaId) errors.areaId = "Area must be selected.";
-      if (table.minSeats && table.maxSeats && table.minSeats >= table.maxSeats) {
+      if (
+        table.minSeats &&
+        table.maxSeats &&
+        table.minSeats >= table.maxSeats
+      ) {
         errors.minSeats = "Min seats must be less than max seats.";
         errors.maxSeats = "Max seats must be greater than min seats.";
       }
 
-      if (table.numberOfTables <= 0) errors.numberOfTables = "Number of tables must be greater than 0.";
-      if (table.startingFrom <= 0) errors.startingFrom = "Starting from must be greater than 0.";
-      if (table.minSeats <= 0) errors.minSeats = "Min seats must be greater than 0.";
-      if (table.maxSeats <= 0) errors.maxSeats = "Max seats must be greater than 0.";
+      if (table.numberOfTables <= 0)
+        errors.numberOfTables = "Number of tables must be greater than 0.";
+      if (table.startingFrom <= 0)
+        errors.startingFrom = "Starting from must be greater than 0.";
+      if (table.minSeats <= 0)
+        errors.minSeats = "Min seats must be greater than 0.";
+      if (table.maxSeats <= 0)
+        errors.maxSeats = "Max seats must be greater than 0.";
 
       if (Object.keys(errors).length > 0) isValid = false;
       return { ...table, errors };
@@ -106,7 +117,7 @@ const AddTableSheet = () => {
     return isValid;
   };
 
-  const handleAutomaticCreate = () => {
+  const handleAutomaticCreate = async () => {
     if (!validateFields()) return; // Stop if validation fails
 
     const tableData = {
@@ -120,10 +131,17 @@ const AddTableSheet = () => {
       numberOfTables: tableBoxes[0].numberOfTables,
     };
 
-    createAutomaticTables(tableData);
+    try {
+      setLoading(true);
+
+      await createAutomaticTables(tableData);
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCustomCreate = () => {
+  const handleCustomCreate = async () => {
     if (!validateFields()) return; // Stop if validation fails
 
     const tableData = tableBoxes.map((table) => ({
@@ -135,10 +153,17 @@ const AddTableSheet = () => {
       maxSeats: table.maxSeats,
     }));
 
-    createCustomTables({ tables: tableData });
+    try {
+      setLoading(true);
+
+      await createCustomTables({ tables: tableData });
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if(!openTableAddSheet){
+  if (!openTableAddSheet) {
     return null;
   }
 
@@ -160,7 +185,11 @@ const AddTableSheet = () => {
               <label>Automatic Table Name</label>
             </div>
             <div>
-              <input type="radio" checked={mode === "custom"} onChange={() => handleModeChange("custom")} />
+              <input
+                type="radio"
+                checked={mode === "custom"}
+                onChange={() => handleModeChange("custom")}
+              />
               <label>Custom Table Name</label>
             </div>
           </div>
@@ -173,16 +202,22 @@ const AddTableSheet = () => {
                   placeholder="Table Title"
                   className="form-input"
                   value={table.tableName}
-                  onChange={(e) => handleInputChange(index, "tableName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(index, "tableName", e.target.value)
+                  }
                 />
-                {table.errors.tableName && <span className="error-text">{table.errors.tableName}</span>}
+                {table.errors.tableName && (
+                  <span className="error-text">{table.errors.tableName}</span>
+                )}
               </div>
               <div>
                 <label className="form-label">Select Area</label>
                 <select
                   className="form-input"
                   value={table.areaId}
-                  onChange={(e) => handleInputChange(index, "areaId", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange(index, "areaId", e.target.value)
+                  }
                 >
                   <option value="">Select Area</option>
                   {areas.map((area) => (
@@ -191,7 +226,9 @@ const AddTableSheet = () => {
                     </option>
                   ))}
                 </select>
-                {table.errors.areaId && <span className="error-text">{table.errors.areaId}</span>}
+                {table.errors.areaId && (
+                  <span className="error-text">{table.errors.areaId}</span>
+                )}
               </div>
 
               {mode === "automatic" && (
@@ -202,7 +239,13 @@ const AddTableSheet = () => {
                       type="number"
                       className="form-input"
                       value={table.numberOfTables}
-                      onChange={(e) => handleInputChange(index, "numberOfTables", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "numberOfTables",
+                          e.target.value
+                        )
+                      }
                     />
                   </div>
                   <div>
@@ -211,7 +254,9 @@ const AddTableSheet = () => {
                       type="number"
                       className="form-input"
                       value={table.startingFrom}
-                      onChange={(e) => handleInputChange(index, "startingFrom", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange(index, "startingFrom", e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -223,9 +268,13 @@ const AddTableSheet = () => {
                     type="number"
                     className="form-input"
                     value={table.minSeats}
-                    onChange={(e) => handleInputChange(index, "minSeats", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(index, "minSeats", e.target.value)
+                    }
                   />
-                  {table.errors.minSeats && <span className="error-text">{table.errors.minSeats}</span>}
+                  {table.errors.minSeats && (
+                    <span className="error-text">{table.errors.minSeats}</span>
+                  )}
                 </div>
                 <div>
                   <label className="form-label">Max Seats:</label>
@@ -233,35 +282,50 @@ const AddTableSheet = () => {
                     type="number"
                     className="form-input"
                     value={table.maxSeats}
-                    onChange={(e) => handleInputChange(index, "maxSeats", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange(index, "maxSeats", e.target.value)
+                    }
                   />
-                  {table.errors.maxSeats && <span className="error-text">{table.errors.maxSeats}</span>}
+                  {table.errors.maxSeats && (
+                    <span className="error-text">{table.errors.maxSeats}</span>
+                  )}
                 </div>
               </div>
 
               <div className="form-group toggle-container py-3">
-                <label className="toggle-label">Available in online reservation</label>
+                <label className="toggle-label">
+                  Available in online reservation
+                </label>
                 <input
                   type="checkbox"
                   className="toggle-switch"
                   checked={table.onlineTableReservation}
-                  onChange={(e) => handleReservationChange(index, e.target.checked)}
+                  onChange={(e) =>
+                    handleReservationChange(index, e.target.checked)
+                  }
                 />
               </div>
             </div>
           ))}
           {mode === "custom" && (
-            <h3 className="text-violet-500 add-table-button" onClick={handleAddTableBox}>
+            <h3
+              className="text-violet-500 add-table-button"
+              onClick={handleAddTableBox}
+            >
               + Add Table
             </h3>
           )}
         </div>
         <div className="side-sheet-footer border-t py-3 side-sheet-button">
-          <button className="btn-cancel" onClick={toggleAddTableSheet}>Cancel</button>
+          <button className="btn-cancel" onClick={toggleAddTableSheet}>
+            Cancel
+          </button>
           <button
             className="btn-submit"
             onClick={() => {
-              mode === "custom" ? handleCustomCreate() : handleAutomaticCreate();
+              mode === "custom"
+                ? handleCustomCreate()
+                : handleAutomaticCreate();
             }}
           >
             Create

@@ -6,11 +6,15 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import AddModifierGroupForm from "../../component/AddModifierGroupForm/AddModifierGroupForm.jsx";
 import ModifierGroupTable from "../../component/ModifierGroupTable/ModifierGroupTable.jsx";
+import LoadingIndicator from "../../component/LoadingIndicator/LoadingIndicator.jsx";
+import { VenueContext } from "../../context/VenueContext.jsx";
 const MenuManagement = () => {
   const [activeTab, setActiveTab] = useState("menu");
 
   const [selectedForm, setSelectedForm] = useState(null);
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue,loading } = useContext(AuthContext);
+
+  // const {loading} = useContext(VenueContext);
 
   const handleOpenMenuForm = () => {
     if (activeTab === "menu") {
@@ -68,6 +72,8 @@ const MenuManagement = () => {
       {selectedForm === "addModifier" && (
         <AddModifierGroupForm isOpen={selectedForm} onClose={handleCloseForm} />
       )}
+        {/* <LoadingIndicator loading={loading}/> */}
+
     </div>
   );
 };

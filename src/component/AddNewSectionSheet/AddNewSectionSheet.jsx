@@ -6,11 +6,12 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import Select from "react-select"; // Import React-Select
 import { MenuContext } from "../../context/MenuContext.jsx";
-import './ResponsiveAddSectionSheet.css';
+import "./ResponsiveAddSectionSheet.css";
 import { baseUrl } from "../../const/constants.js";
+import { toast } from "react-toastify";
 const AddNewSectionSheet = ({}) => {
   const { menuId } = useParams();
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   // all menu items and section data
   const {
@@ -28,7 +29,7 @@ const AddNewSectionSheet = ({}) => {
     image: null,
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setSaveLoading] = useState(false);
   const [dropdownOption, setDropdownOptions] = useState([]);
 
   // handle input field change
@@ -50,6 +51,7 @@ const AddNewSectionSheet = ({}) => {
 
   const createSection = async (e) => {
     e.preventDefault();
+    setSaveLoading(true);
     setLoading(true);
 
     const apiUrl = `${baseUrl}/menu/menusection/${menuId}`;
@@ -77,11 +79,15 @@ const AddNewSectionSheet = ({}) => {
       updateMenuSections(response.data.data);
       // Reset form on success
       setFormData({ name: "", image: null, parentId: null });
+      toast.success(`${formData.name} Section added`);
 
       closeSectionSheet();
     } catch (error) {
+      toast.error("Error adding section, try again");
+
       console.error("Error submitting form:", error.response || error.message);
     } finally {
+      setSaveLoading(false);
       setLoading(false);
     }
   };
@@ -123,6 +129,7 @@ const AddNewSectionSheet = ({}) => {
   // updating section data in backend
   const updateSectionData = async (e) => {
     e.preventDefault();
+    setSaveLoading(true);
     setLoading(true);
     const sectionId = editSectionData._id;
     const oldParentId = editSectionData.parentId; // Existing parentId
@@ -162,11 +169,14 @@ const AddNewSectionSheet = ({}) => {
 
         return updatedMenuData;
       });
+      toast.success("Section updated successfully");
 
       closeSectionSheet();
     } catch (error) {
+      toast.error("Something went wrong, Try Again")
       console.error("Error updating form:", error.response || error.message);
     } finally {
+      setSaveLoading(false);
       setLoading(false);
     }
   };
@@ -279,114 +289,114 @@ const AddNewSectionSheet = ({}) => {
 
   return (
     <div className="section-bg ">
-        <div className="add-section-container">
-      <h2>Add New Section</h2>
-      <form
-        onSubmit={(e) => {
-          if (editSectionData) {
-            updateSectionData(e);
-          } else {
-            createSection(e);
-          }
-        }}
-      >
-        {/* Form Fields */}
-        <div className="form-group flex flex-col">
-          <label htmlFor="name">
-            Name <span style={{ color: "red" }}>*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="px-2 py-1 border outline-none rounded-md"
-          />
-        </div>
-
-        <div className="form-group flex flex-col">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            placeholder="Enter Description"
-            value={formData.description}
-            onChange={handleChange}
-            className="px-2 py-1 border outline-none rounded-md resize-none"
-          ></textarea>
-        </div>
-
-        <div className="form-group flex flex-col">
-          <label htmlFor="image">Image</label>
-          <div
-            className="h-24 w-40 bg-violet-300 rounded-md relative overflow-hidden object-cover cursor-pointer flex items-center justify-center"
-            onClick={() => document.getElementById("image").click()}
-          >
-            {!formData.image && (
-              <p className="text-sm absolute ">Choose Image</p>
-            )}
-            {/* Hidden file input */}
-            <input
-              type="file"
-              id="image"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-
-            {/* Image Preview */}
-            {formData.image ? (
-              formData.image instanceof File ? (
-                <img
-                  src={URL.createObjectURL(formData.image)}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <img
-                  src={formData.image}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              )
-            ) : null}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Assign Section (optional)</label>
-          <Select
-            value={
-              dropdownOption.find(
-                (option) => option.value === sectionParentId
-              ) || null
+      <div className="add-section-container">
+        <h2>Add New Section</h2>
+        <form
+          onSubmit={(e) => {
+            if (editSectionData) {
+              updateSectionData(e);
+            } else {
+              createSection(e);
             }
-            onChange={handleParentChange}
-            options={dropdownOption}
-            placeholder="Select sub section..."
-            className="form-select"
-            classNamePrefix="select"
-            isClearable
-          />
-        </div>
+          }}
+        >
+          {/* Form Fields */}
+          <div className="form-group flex flex-col">
+            <label htmlFor="name">
+              Name <span style={{ color: "red" }}>*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="px-2 py-1 border outline-none rounded-md"
+            />
+          </div>
 
-        {/* Buttons */}
-        <div className="form-actions">
-          <button
-            type="button"
-            className="cancel-btn"
-            onClick={closeSectionSheet}
-          >
-            Cancel
-          </button>
-          <button type="submit" className="save-btn">
-            {loading ? "Saving.." : "Save"}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="form-group flex flex-col">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Enter Description"
+              value={formData.description}
+              onChange={handleChange}
+              className="px-2 py-1 border outline-none rounded-md resize-none"
+            ></textarea>
+          </div>
+
+          <div className="form-group flex flex-col">
+            <label htmlFor="image">Image</label>
+            <div
+              className="h-24 w-40 bg-violet-300 rounded-md relative overflow-hidden object-cover cursor-pointer flex items-center justify-center"
+              onClick={() => document.getElementById("image").click()}
+            >
+              {!formData.image && (
+                <p className="text-sm absolute ">Choose Image</p>
+              )}
+              {/* Hidden file input */}
+              <input
+                type="file"
+                id="image"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+
+              {/* Image Preview */}
+              {formData.image ? (
+                formData.image instanceof File ? (
+                  <img
+                    src={URL.createObjectURL(formData.image)}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={formData.image}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                )
+              ) : null}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Assign Section (optional)</label>
+            <Select
+              value={
+                dropdownOption.find(
+                  (option) => option.value === sectionParentId
+                ) || null
+              }
+              onChange={handleParentChange}
+              options={dropdownOption}
+              placeholder="Select sub section..."
+              className="form-select"
+              classNamePrefix="select"
+              isClearable
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="form-actions">
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={closeSectionSheet}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              {loading ? "Saving.." : "Save"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

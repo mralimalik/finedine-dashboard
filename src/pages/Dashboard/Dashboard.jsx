@@ -6,14 +6,16 @@ import ScanMe from "../../assets/scanme.png";
 import Phone from "../../assets/phone.png";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { useContext } from "react";
-import './ResponsiveDashboard.css'
+import "./ResponsiveDashboard.css";
 import { qrlink } from "../../const/constants.js";
 const Dashboard = () => {
   const currentDate = new Date();
   const formattedDate = format(currentDate, "EEEE, dd MMMM HH:mm");
   const { userData, selectedVenue } = useContext(AuthContext);
 
-  const previewLink = selectedVenue ? `${qrlink}${selectedVenue?.venueId}` : "#";
+  const previewLink = selectedVenue
+    ? `${qrlink}${selectedVenue?.venueId}`
+    : "#";
   return (
     <div className="main-dashboard">
       <div className="welcome-div">
@@ -25,7 +27,9 @@ const Dashboard = () => {
         <div className="qr-text-left">
           <span className="text-2xl">🎉</span>
           <h2 className="text-2xl">
-            {selectedVenue ? "Your digital menu is ready!" : "To Continue Create Venue"}
+            {selectedVenue
+              ? "Your digital menu is ready!"
+              : "To Continue Create Venue"}
           </h2>
 
           <h4>
@@ -69,8 +73,22 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <PagePreview />
     </div>
   );
 };
 
 export default Dashboard;
+
+export const PagePreview = () => {
+  return (
+    <div className=" border h-[350px] w-[400px] overflow-hidden ">
+      <iframe f
+        className="w-full h-full border overflow-x-hidden overflow-y-auto"
+        src="https://qr-menu-frontend-beryl.vercel.app/eZdQRmjR"
+        title="Page Preview"
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+      />
+    </div>
+  );
+};

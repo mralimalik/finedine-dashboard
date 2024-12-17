@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { MenuContext } from "../../context/MenuContext";
+import { AuthContext } from "../../context/AuthContext";
+
+
+import {toast} from 'react-toastify';
+
 const AddMenuSectionItem = ({ parentId }) => {
   const [isAddDropDownVisible, setAddDropDownVisible] = useState(false);
   const dropdownRef = useRef(null);
+  const {setLoading} = useContext(AuthContext);
 
   const { toggleSectionSheet, toggleNewItemSheet } = useContext(MenuContext);
 

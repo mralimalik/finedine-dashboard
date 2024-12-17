@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { baseUrl } from "../const/constants.js";
+import { toast } from "react-toastify";
 export const MenuContext = createContext();
 
 export const MenuContextProvider = ({ children }) => {
@@ -134,12 +135,16 @@ export const MenuContextProvider = ({ children }) => {
   };
 
   const createItem = async (menuId, selectedVenue) => {
+
+
     const apiUrl = `${baseUrl}/menu/menuitem/${menuId}`;
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
     console.log(price);
 
     try {
+
+    
       // Create FormData object
       const data = new FormData();
       data.append("itemName", itemName);
@@ -163,11 +168,13 @@ export const MenuContextProvider = ({ children }) => {
       if (response.status === 200) {
         console.log("API Response:", response.data.data);
         updateMenuItems(response.data.data);
-        alert("Item added successfully");
+        toast.success( `${itemName} added successfully`);
+
         clearItemFields();
         closeSectionSheet();
       }
     } catch (error) {
+      toast.error("Error adding item, try again")
       console.error("Error creating item:", error.response || error.message);
     } finally {
     }

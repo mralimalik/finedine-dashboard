@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import QRCode from "qrcode"; // QR code library
 import JSZip from "jszip"; // Import JSZip library
-import { qrlink ,baseUrl} from "../const/constants.js";
+import { qrlink, baseUrl } from "../const/constants.js";
+import { toast } from "react-toastify";
 export const TableContext = createContext();
 
 export const TableContextProvider = ({ children }) => {
@@ -54,7 +55,7 @@ export const TableContextProvider = ({ children }) => {
 
     try {
       const response = await axios.post(
-          `${baseUrl}/table/createArea`,
+        `${baseUrl}/table/createArea`,
         {
           areaName,
           venueId: venueId,
@@ -69,15 +70,20 @@ export const TableContextProvider = ({ children }) => {
         setAreas((prev) => {
           return prev.map((area) => {
             // For each area, filter out the tables whose _id is in tableIds
-            const updatedTables = area.tables.filter((table) => !tableIds.includes(table._id));
+            const updatedTables = area.tables.filter(
+              (table) => !tableIds.includes(table._id)
+            );
 
             // Update the area with the filtered tables
             return { ...area, tables: updatedTables };
           });
         }); // Add the new area with the new tables
         setAreas((prev) => [...prev, newArea]);
+
+        toast.success("Area added");
       }
     } catch (err) {
+      toast.error("Error adding area,try again");
       console.log("error creating area", err);
     } finally {
     }
@@ -111,7 +117,7 @@ export const TableContextProvider = ({ children }) => {
 
       // Send data to the backend
       const response = await axios.post(
-         `${baseUrl}/table/createAutomaticTable`,
+        `${baseUrl}/table/createAutomaticTable`,
         tableData,
         config
       );
@@ -132,9 +138,12 @@ export const TableContextProvider = ({ children }) => {
             return area;
           })
         );
+        toast.success("Tables added successfully");
         toggleAddTableSheet();
       }
     } catch (err) {
+      toast.error("Something went wrong");
+
       console.log("Error creating tables:", err);
     }
   };
@@ -151,7 +160,11 @@ export const TableContextProvider = ({ children }) => {
       };
 
       // Send data to the backend
-      const response = await axios.post(`${baseUrl}/table/createCustomTable`, tableData, config);
+      const response = await axios.post(
+        `${baseUrl}/table/createCustomTable`,
+        tableData,
+        config
+      );
 
       if (response.status === 200) {
         console.log("Tables created successfully:", response.data.data);
@@ -162,7 +175,9 @@ export const TableContextProvider = ({ children }) => {
         setAreas((prevAreas) =>
           prevAreas.map((area) => {
             // Find tables with matching areaId and add them to the area's tables array
-            const areaTables = newTables.filter((table) => table.areaId === area._id);
+            const areaTables = newTables.filter(
+              (table) => table.areaId === area._id
+            );
             if (areaTables.length > 0) {
               return {
                 ...area,
@@ -172,9 +187,13 @@ export const TableContextProvider = ({ children }) => {
             return area; // If no matching areaId, return the area unchanged
           })
         );
+        toast.success("Tables added successfully");
+
         toggleAddTableSheet();
       }
     } catch (err) {
+      toast.error("Something went wrong");
+
       console.log("Error creating tables:", err);
     }
   };
@@ -190,7 +209,9 @@ export const TableContextProvider = ({ children }) => {
     // Iterate over the selected table IDs
     selectedTables.forEach((tableId) => {
       // Find the table object using the tableId by searching through all areas and their tables
-      const table = areas.flatMap((area) => area.tables).find((table) => table._id === tableId);
+      const table = areas
+        .flatMap((area) => area.tables)
+        .find((table) => table._id === tableId);
 
       // If the table exists, generate a QR code for it
       if (table) {
@@ -213,7 +234,9 @@ export const TableContextProvider = ({ children }) => {
             const imageData = dataUrl.split(",")[1];
 
             // Add the QR code image to the zip file in the folder "QR_Codes" with a filename using the table name
-            folder.file(`${table.tableName}_QRCode.png`, imageData, { base64: true });
+            folder.file(`${table.tableName}_QRCode.png`, imageData, {
+              base64: true,
+            });
           }
         });
       }

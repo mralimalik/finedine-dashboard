@@ -7,13 +7,13 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { MenuContext } from "../../context/MenuContext.jsx";
 import Select from "react-select";
 import ItemModifierOptions from "../ItemModifierOptions/ItemModifierOptions.jsx";
-import './ResponsiveItemSheet.css'
+import './ResponsiveItemSheet.css';
 const AddNewItemSheet = () => {
   const [activeTab, setActiveTab] = useState("general");
 
   const { menuId } = useParams();
-  const { selectedVenue } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const { selectedVenue,setLoading } = useContext(AuthContext);
+  const [loading, setItemLoading] = useState(false);
   const {
     createItem,
     closeSectionSheet,
@@ -86,11 +86,15 @@ const AddNewItemSheet = () => {
           onClick={() => {
             if (loading === false) {
               try {
+                setItemLoading(true);
                 setLoading(true);
                 createItem(menuId, selectedVenue);
-                setLoading(false);
+                setItemLoading(false);
               } catch (e) {
+                setItemLoading(false);
+              }finally{
                 setLoading(false);
+
               }
             }
           }}

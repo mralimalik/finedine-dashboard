@@ -15,9 +15,9 @@ const TableList = () => {
     setSelectedTables,
     handleTableSelection,
     toggleEditTableSheet,
-    setTableForEditing
+    setTableForEditing,
   } = useContext(TableContext);
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   // Toggle the specific area's state
   const toggleExpand = (areaId) => {
@@ -44,14 +44,26 @@ const TableList = () => {
     });
   };
 
+  const handleFetchAreaTables = async () => {
+   try{
+    setLoading(true);
+    await fetchAreaWithTables(selectedVenue?.venueId);
+   }catch(e){
+
+   }finally{
+    setLoading(false);
+   }
+  };
   useEffect(() => {
-    fetchAreaWithTables(selectedVenue?.venueId);
+    handleFetchAreaTables();
   }, [selectedVenue?.venueId]);
 
   return (
     <div>
       {areas.map((area, index) => {
-        const isAreaSelected = area.tables.every((table) => selectedTables.includes(table._id));
+        const isAreaSelected = area.tables.every((table) =>
+          selectedTables.includes(table._id)
+        );
 
         return (
           <div className="expandable-list my-2" key={index}>
@@ -68,7 +80,11 @@ const TableList = () => {
                 onChange={() => handleAreaSelection(area._id, area.tables)}
               />
               <span className="header-title">{area.areaName}</span>
-              <span className={`arrow ${expandedAreas[area._id] ? "up" : "down"}`}>&#x25BC;</span>
+              <span
+                className={`arrow ${expandedAreas[area._id] ? "up" : "down"}`}
+              >
+                &#x25BC;
+              </span>
             </div>
             {expandedAreas[area._id] && (
               <div className={`list-items`} ref={listRef}>
@@ -87,7 +103,14 @@ const TableList = () => {
                         </span>
                       </div>
                       <div className="table-items-right">
-                        <button className="edit-button" onClick={()=>{setTableForEditing(table)}}>&#x270E;</button>
+                        <button
+                          className="edit-button"
+                          onClick={() => {
+                            setTableForEditing(table);
+                          }}
+                        >
+                          &#x270E;
+                        </button>
                         <button className="delete-button">&#x1F5D1;</button>
                       </div>
                     </li>

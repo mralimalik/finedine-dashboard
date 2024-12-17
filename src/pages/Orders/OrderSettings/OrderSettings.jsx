@@ -8,10 +8,11 @@ import axios from "axios";
 import { useEffect } from "react";
 import { OrderContext } from "../../../context/OrderContext.jsx";
 import { baseUrl } from "../../../const/constants.js";
-const OrderSettings = () => {
-  const { selectedVenue } = useContext(AuthContext);
-  const { orderSettings,setOrderSettings } = useContext(OrderContext);
+import { toast } from "react-toastify";
 
+const OrderSettings = () => {
+  const { selectedVenue, setLoading } = useContext(AuthContext);
+  const { orderSettings, setOrderSettings } = useContext(OrderContext);
 
   const [activeTab, setActiveTab] = useState("dineIn");
   // const [orderSettings, setOrderSettings] = useState(null);
@@ -59,20 +60,20 @@ const OrderSettings = () => {
           </button>
         </div>
       </div>
-    <div className="w-2/5 order-setting-div">
-    {activeTab === "dineIn" && (
-        <DineInOrderSettings
-          dinInsettingsData={orderSettings?.settings?.dineIn}
-          setOrderSettings={setOrderSettings}
-        />
-      )}
-      {activeTab === "delivery" && (
-        <DeliveryOrderSettings
-          deliverysettingsData={orderSettings?.settings?.delivery}
-          setOrderSettings={setOrderSettings}
-        />
-      )}
-    </div>
+      <div className="w-2/5 order-setting-div">
+        {activeTab === "dineIn" && (
+          <DineInOrderSettings
+            dinInsettingsData={orderSettings?.settings?.dineIn}
+            setOrderSettings={setOrderSettings}
+          />
+        )}
+        {activeTab === "delivery" && (
+          <DeliveryOrderSettings
+            deliverysettingsData={orderSettings?.settings?.delivery}
+            setOrderSettings={setOrderSettings}
+          />
+        )}
+      </div>
     </div>
   );
 };
@@ -80,10 +81,11 @@ const OrderSettings = () => {
 export default OrderSettings;
 
 const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   const handleToggle = async (type, value) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("Token");
       // Prepare update data
       const updateData = {
@@ -106,7 +108,11 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
 
       setOrderSettings(response.data.data);
     } catch (error) {
+      toast.error("Something went wrong");
+
       console.error("Error updating dine-in settings:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -151,10 +157,11 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
 };
 
 const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
   const handleToggle = async (type, value) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("Token");
       // Prepare update data
       const updateData = {
@@ -177,7 +184,10 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
 
       setOrderSettings(response.data.data);
     } catch (error) {
+      toast.error("Something went wrong");
       console.error("Error updating dine-in settings:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

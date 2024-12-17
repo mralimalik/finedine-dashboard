@@ -3,15 +3,16 @@ import { useParams } from "react-router-dom";
 export const VenueContext = createContext();
 
 export const VenueContextProvider = ({ children, venueId }) => {
+
+ 
   // for storing add venue dialog to show or not
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // for storing add venue dialog ref
   const venueModalRef = useRef(null);
 
-// for handling charges of venue sale
+  // for handling charges of venue sale
   const [extraCharges, setExtraCharges] = useState([]);
-
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -35,7 +36,8 @@ export const VenueContextProvider = ({ children, venueId }) => {
         setIsModalOpen,
         venueId,
         extraCharges,
-        setExtraCharges
+        setExtraCharges,
+       
       }}
     >
       {children}

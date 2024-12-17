@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../../context/SidebarContext.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import Logo from "../../assets/finedinemenu.webp";
+import Logo from "../../assets/logo.jpg";
 import "./Sidebar.css";
 
 const Sidebar = ({ isSidebarOpen }) => {
@@ -87,8 +87,8 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <div className={`sidebar `}>
-      <div className="image-log flex justify-between items-center pr-2">
-        <img src={Logo} alt="" className="logo-img h-14 m-3" />
+      <div className="image-log flex justify-between items-center ">
+        <img src={Logo} alt="" className="logo-img h-11 m-3" />
         {/* <h3>Close</h3> */}
       </div>
 

@@ -16,3 +16,23 @@
         left: 30px;
     } */
 }
+
+
+
+@media (min-width: 1530px) {
+    .iframe-main-div{
+    transform: scale(0.85);
+    top:65px;
+    left:44px
+ }
+ .iframe-div{
+
+ }
+ .mobile-frame-div{
+    transform: scale(1);
+    top:30px;
+    left: -255px;
+    width: 950px;
+    height: 780px;
+ }
+}

@@ -7,7 +7,7 @@ function LoadingIndicator({ loading }) {
       className={`${
         loading !== true ? "hidden" : ""
       }  fixed inset-0 h-screen bg-black bg-opacity-20 flex justify-center items-center flex-col`}
-      style={{ zIndex: 10000 }} // Direct numeric zIndex
+      style={{ zIndex: 1000000 }} // Direct numeric zIndex
     >
       <ClipLoader
         color="#36D7B7"

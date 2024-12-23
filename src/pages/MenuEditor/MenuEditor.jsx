@@ -44,7 +44,7 @@ const MenuEditor = () => {
                 key={section._id}
                 sectionData={section}
                 items={section.items}
-                subSections={section.subSections}
+                subSections={section.subSections}                
               />
             );
           }

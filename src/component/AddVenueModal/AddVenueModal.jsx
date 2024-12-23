@@ -7,16 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../const/constants.js";
 import { toast } from "react-toastify";
 const AddVenueModal = ({ isOpen, onClose }) => {
-  // for venue modal dialog ref
-  const { venueModalRef } = useContext(VenueContext);
-
-  // getting all venues, selected current venue, seting current venue
-  const { setUserVenues, selectedVenue, userVenues, setSelectedVenue,setLoading } = useContext(AuthContext);
-
   const [venueName, setVenueName] = useState("");
   const [country, setCountry] = useState("");
 
   const navigate = useNavigate();
+
+  // for venue modal dialog ref
+  const { venueModalRef } = useContext(VenueContext);
+
+  // getting all venues, selected current venue, seting current venue
+  const {
+    setUserVenues,
+    selectedVenue,
+    userVenues,
+    setSelectedVenue,
+    setLoading,
+  } = useContext(AuthContext);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -59,9 +65,8 @@ const AddVenueModal = ({ isOpen, onClose }) => {
     } catch (err) {
       toast.error("Something went wrong");
       console.log("Error creating venue:", err);
-    }finally{
+    } finally {
       setLoading(false);
-
     }
   };
   if (!isOpen) return null;
@@ -89,16 +94,10 @@ const AddVenueModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="country">Country</label>
-            <select id="country" value={country} onChange={(e) => setCountry(e.target.value)} required>
-              <option value="" disabled>
-                Select Country
-              </option>
-              <option value="USA">USA</option>
-              <option value="UK">UK</option>
-              <option value="Canada">Canada</option>
-              <option value="Australia">Australia</option>
-            </select>
+            <SelectVenueCountryDropdown
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
           </div>
 
           <div className="modal-actions">
@@ -116,3 +115,32 @@ const AddVenueModal = ({ isOpen, onClose }) => {
 };
 
 export default AddVenueModal;
+
+export const SelectVenueCountryDropdown = ({
+  value,
+  onChange,
+  mainClassname,
+  dropdownClass,
+}) => {
+  return (
+    <div className={mainClassname}>
+      <label htmlFor="country">Country</label>
+      <select
+        id="country"
+        name="country"
+        value={value}
+        onChange={onChange}
+        required
+        className={dropdownClass}
+      >
+        <option value="" disabled>
+          Select Country
+        </option>
+        <option value="USA">USA</option>
+        <option value="UK">UK</option>
+        <option value="Canada">Canada</option>
+        <option value="Australia">Australia</option>
+      </select>
+    </div>
+  );
+};

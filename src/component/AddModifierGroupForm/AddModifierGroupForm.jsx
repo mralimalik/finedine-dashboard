@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import ReuseTextField from "../ReuseTextField/ReuseTextField";
 import ReuseItemPriceTextField from "../ReuseItemPriceTextField/ReuseItemPriceTextField";
 import { MenuContext } from "../../context/MenuContext";
@@ -9,18 +9,21 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { baseUrl } from "../../const/constants.js";
 import { VenueContext } from "../../context/VenueContext.jsx";
+
 import { toast } from "react-toastify";
-const AddModifierGroupForm = ({ isOpen, onClose }) => {
+
+const AddModifierGroupForm = ({ onClose, initialData = null }) => {
+  const [modifierGroupName, setGroupName] = useState("");
+
   const {
     modifierPrices,
     setModifierPriceCalorie,
     allModifierData,
     setModifierData,
   } = useContext(ModifierContext);
-  const { selectedVenue ,setLoading} = useContext(AuthContext);
 
-  const [modifierGroupName, setGroupName] = useState("");
-//  const {setLoading} = useContext(VenueContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
+
   const handleInputChange = (index, field, value) => {
     const updatedPrice = [...modifierPrices];
 
@@ -50,12 +53,12 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
 
   // Handle deleting a price option
   const handleDeletePrice = (index) => {
-    const updatedPrice = modifierPrices.filter((_, idx) => idx !== index); // Remove item at the specified index
+    const updatedPrice = modifierPrices.filter((_, idx) => idx !== index); 
     setModifierPriceCalorie(updatedPrice);
   };
 
   // Submit the form data to the backend
-  const handleModifierSubmit = async (e) => {
+  const handleCreateModifierSubmit = async (e) => {
     e.preventDefault();
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
@@ -82,19 +85,82 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
 
       if (response.status === 200) {
         console.log("Modifier Group added successfully:", response.data.data);
-      setModifierData((prevState) => [...prevState, response.data.data]);
-      toast.success( `${modifierGroupName} modifier added successfully`)
+        setModifierData((prevState) => [...prevState, response.data.data]);
+        toast.success(`${modifierGroupName} modifier added successfully`);
         onClose();
       }
     } catch (error) {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
       console.error("Error adding modifier group:", error);
       alert("Failed to add modifier group. Please try again.");
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
+  // Submit the form data to the backend
+  const handleUpdateModifier = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("Token");
+
+    if (!modifierGroupName || modifierPrices.length === 0) {
+      toast.error(
+        "Please provide a group name and at least one modifier price."
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.put(
+        `${baseUrl}/modifier/update/${initialData._id}`,
+        {
+          groupName: modifierGroupName,
+          modifierPrices: modifierPrices,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Modifier Group added successfully:", response.data.data);
+
+        // Update the local list
+        setModifierData((prevState) =>
+          prevState.map((modifier) =>
+            modifier._id === initialData._id
+              ? { ...modifier, ...response.data.data }
+              : modifier
+          )
+        );
+        toast.success(`${modifierGroupName} modifier updated successfully`);
+        onClose();
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.error("Error updating modifier group:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (initialData) {
+      setGroupName(initialData.groupName);
+      setModifierPriceCalorie(initialData.modifierPrices);
+    } else {
+      setModifierPriceCalorie([
+        {
+          name: "",
+          price: 0,
+          calories: 0,
+        },
+      ]);
+    }
+  }, [initialData]);
   return (
     <div className="h-full w-full bg-black/50  fixed top-0 left-0 flex justify-center items-center">
       <div className="bg-white py-5 shadow-sm rounded-md main-dialog mx-3">
@@ -153,6 +219,7 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
                       onClick={() => {
                         handleDeletePrice(index);
                       }}
+                      className="cursor-pointer"
                     >
                       🗑️
                     </td>
@@ -171,9 +238,13 @@ const AddModifierGroupForm = ({ isOpen, onClose }) => {
           <button
             type="submit"
             className="add-button"
-            onClick={handleModifierSubmit}
+            onClick={(e) => {
+              initialData === null
+                ? handleCreateModifierSubmit(e)
+                : handleUpdateModifier(e);
+            }}
           >
-            Add
+            {initialData === null ? "Add" : "Update"}
           </button>
         </div>
       </div>

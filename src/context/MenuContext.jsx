@@ -28,6 +28,7 @@ export const MenuContextProvider = ({ children }) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // get menu item and sections data
   const getMenuesItemsandSections = async (menuId) => {
     // Get the token from localStorage
     const token = localStorage.getItem("Token");
@@ -53,7 +54,7 @@ export const MenuContextProvider = ({ children }) => {
   };
 
   // updating section data in backend
-  const updateActiveSection = async (isActive,sectionId) => {
+  const updateActiveSection = async (isActive, sectionId) => {
     // const sectionId = editSectionData._id;
     const apiUrl = `${baseUrl}/menu/menusection/${sectionId}`;
     const token = localStorage.getItem("Token");
@@ -116,7 +117,10 @@ export const MenuContextProvider = ({ children }) => {
 
   // set modifiers for item
   const [modifiers, setModifiers] = useState([]);
+  // labels for item
+  const [selectedLabels, setSelectedLabels] = useState([]);
 
+  // clear fields after doing operations
   const clearItemFields = () => {
     setName("");
     setDescription("");
@@ -134,28 +138,26 @@ export const MenuContextProvider = ({ children }) => {
     setIsSoldOut(false);
   };
 
-  const createItem = async (menuId, selectedVenue) => {
-
-
+  // add items in menu
+  const createItem = async (menuId, selectedVenue, setLoading) => {
     const apiUrl = `${baseUrl}/menu/menuitem/${menuId}`;
     const venueId = selectedVenue._id;
     const token = localStorage.getItem("Token");
     console.log(price);
 
     try {
-
-    
+      setLoading(true);
       // Create FormData object
       const data = new FormData();
       data.append("itemName", itemName);
       data.append("venueId", venueId);
       data.append("itemImage", itemImage);
       data.append("price", JSON.stringify(price));
-      data.append("isSold",isSoldOut);
+      data.append("isSold", isSoldOut);
       if (sectionParentId) data.append("parentId", sectionParentId);
       if (description) data.append("description", description);
       if (modifiers) data.append("modifiers", JSON.stringify(modifiers));
-
+      if (selectedLabels) data.append("labels", JSON.stringify(selectedLabels));
 
       // Send the POST request
       const response = await axios.post(apiUrl, data, {
@@ -168,37 +170,38 @@ export const MenuContextProvider = ({ children }) => {
       if (response.status === 200) {
         console.log("API Response:", response.data.data);
         updateMenuItems(response.data.data);
-        toast.success( `${itemName} added successfully`);
+        toast.success(`${itemName} added successfully`);
 
         clearItemFields();
         closeSectionSheet();
       }
     } catch (error) {
-      toast.error("Error adding item, try again")
+      toast.error("Error adding item, try again");
       console.error("Error creating item:", error.response || error.message);
     } finally {
+      setLoading(false);
     }
   };
 
+  // update menu section list if there is no parent id
   const updateMenuItems = (newItem) => {
-   try{
-    setMenuSectionsData((prevMenuData) => {
-      const updatedMenuData = [...prevMenuData];
+    try {
+      setMenuSectionsData((prevMenuData) => {
+        const updatedMenuData = [...prevMenuData];
 
-      if (!newItem.parentId) {
-        console.error("Items must have a valid parentId!");
-        updatedMenuData.push(newItem);
-      } else {
-        addItemToSection(updatedMenuData, newItem);
-      }
+        if (!newItem.parentId) {
+          console.error("Items must have a valid parentId!");
+          updatedMenuData.push(newItem);
+        } else {
+          addItemToSection(updatedMenuData, newItem);
+        }
 
-      return updatedMenuData;
-    });
-   }catch(e){
-    
-   }
+        return updatedMenuData;
+      });
+    } catch (e) {}
   };
 
+  // update or add item to section if there is parent Id
   const addItemToSection = (sections, newItem) => {
     for (let section of sections) {
       if (section._id === newItem.parentId) {
@@ -217,7 +220,8 @@ export const MenuContextProvider = ({ children }) => {
     console.error("Parent section not found for item!");
     return false;
   };
-  // for edit item
+
+  // for edit item assiging variables
   const assignItemDataToVariables = (itemData) => {
     setName(itemData.itemName);
     setDescription(itemData.description);
@@ -225,19 +229,202 @@ export const MenuContextProvider = ({ children }) => {
     setPriceCalorie(itemData.price);
     setModifiers(itemData.modifiers);
     setIsSoldOut(itemData.isSold);
+    setSelectedLabels(itemData.labels);
+    console.log(selectedLabels);
   };
+
   // to add new sheet
   const toggleNewItemSheet = (sectionId) => {
     setEditItemData(null);
     setSectionParentId(sectionId);
     setShowSectionItemSheet("ITEM");
   };
+
   // to open edit item sheet
   const toggleEditItemSheet = (sectionData) => {
     setEditItemData(null);
     setEditItemData(sectionData);
     setSectionParentId(sectionData.parentId);
     setShowSectionItemSheet("ITEM");
+  };
+
+  // to delete the section data from backend
+  const handleItemDelete = async (menuId, itemId, setLoading, handleClose) => {
+    try {
+      setLoading(true);
+
+      // Construct the URL for DELETE request
+      const url = `${baseUrl}/menu/delete/${menuId}/item/${itemId}`;
+      const token = localStorage.getItem("Token");
+
+      // Perform the DELETE request
+      const response = await axios.delete(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 200) {
+        setMenuSectionsData((prevMenuSectionsData) =>
+          deleteItemFromSectionsRecursively(prevMenuSectionsData, itemId)
+        );
+        handleClose();
+        toast.success("Item deleted successfully");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error deleting section:", error);
+      toast.error("Failed to delete the item. Please try again.");
+    } finally {
+      setLoading(false); // Reset loading state
+    }
+  };
+
+  // after deleting item from backend, remove it from list too
+  const deleteItemFromSectionsRecursively = (sections, itemId) => {
+    return (
+      sections
+        .map((section) => {
+          // Filter items in the current section
+          if (section.items) {
+            section.items = section.items.filter((item) => item._id !== itemId);
+          }
+
+          // Check and update subSections recursively
+          if (section.subSections) {
+            section.subSections = deleteItemFromSectionsRecursively(
+              section.subSections,
+              itemId
+            );
+          }
+
+          return section;
+        })
+        // Remove any section or item at this level that matches the itemId
+        .filter((section) => section._id !== itemId)
+    );
+  };
+
+  // update item data in menu
+  const updateItem = async (itemId, setLoading) => {
+    const apiUrl = `${baseUrl}/menu/update/menuitem/${itemId}`;
+    const token = localStorage.getItem("Token");
+    console.log(price);
+
+    try {
+      setLoading(true);
+
+      // Create FormData object
+      const data = new FormData();
+      data.append("itemName", itemName);
+      data.append("itemImage", itemImage);
+      data.append("price", JSON.stringify(price));
+      data.append("isSold", isSoldOut);
+      if (sectionParentId) data.append("parentId", sectionParentId);
+      if (description) data.append("description", description);
+      if (modifiers) data.append("modifiers", JSON.stringify(modifiers));
+      if (selectedLabels) data.append("labels", JSON.stringify(selectedLabels));
+
+      // Send the POST request
+      const response = await axios.put(apiUrl, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const newUpdatedItem = response.data.data;
+
+        // Update menu sections
+        setMenuSectionsData((prevSections) =>
+          updateSectionItemList(
+            [...prevSections],
+            newUpdatedItem,
+            editItemData.parentId
+          )
+        );
+
+        // setMenuSectionsData((prev)=>());
+        console.log("API Response:", response.data.data);
+        toast.success(`${itemName} updated successfully`);
+        closeSectionSheet();
+      }
+    } catch (error) {
+      toast.error("Error updating item, try again");
+      console.error("Error creating item:", error.response || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const updateSectionItemList = (sections, newItem, oldParentId) => {
+    // If the parentId has changed, remove the item from the old parent section
+    if (newItem.parentId !== oldParentId) {
+      sections.forEach((section) => {
+        if (section.items) {
+          section.items = section.items.filter(
+            (item) => item._id !== newItem._id
+          );
+        }
+        if (section.subSections) {
+          updateSectionItemList(section.subSections, newItem, oldParentId);
+        }
+      });
+    }
+
+    // Add or update item in the new parent section
+    sections.forEach((section) => {
+      if (section._id === newItem.parentId) {
+        section.items = section.items || [];
+        const existingItemIndex = section.items.findIndex(
+          (item) => item._id === newItem._id
+        );
+        if (existingItemIndex !== -1) {
+          // Update existing item with the new data
+          section.items[existingItemIndex] = newItem;
+        } else {
+          // Add the item if it doesn't exist in this section
+          section.items.push(newItem);
+        }
+      }
+      if (section.subSections) {
+        updateSectionItemList(section.subSections, newItem, oldParentId);
+      }
+    });
+
+    return sections;
+  };
+
+  // update item data in menu
+  const updateActiveItem = async (itemId, setLoading, isActive) => {
+    const apiUrl = `${baseUrl}/menu/update/menuitem/${itemId}`;
+    const token = localStorage.getItem("Token");
+    console.log(price);
+
+    try {
+      setLoading(true);
+
+      // Create FormData object
+      const data = new FormData();
+
+      data.append("isActive", isActive);
+
+      // Send the POST request
+      const response = await axios.put(apiUrl, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("item enabled disabled",isActive);
+        
+      }
+    } catch (error) {
+      toast.error("Error updating item, try again");
+      console.error("Error creating item:", error.response || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -274,7 +461,12 @@ export const MenuContextProvider = ({ children }) => {
         modifiers,
         setModifiers,
         setShowSectionItemSheet,
-        updateActiveSection
+        updateActiveSection,
+        handleItemDelete,
+        updateItem,
+        selectedLabels,
+        setSelectedLabels,
+        updateActiveItem
       }}
     >
       {children}

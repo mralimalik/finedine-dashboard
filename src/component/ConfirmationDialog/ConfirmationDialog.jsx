@@ -9,7 +9,7 @@ const ConfirmationDialogBox = ({
   cancelText = "No" 
 }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 cursor-auto " onClick={(e)=>e.stopPropagation()} draggable={false}>
       <div className="bg-white rounded-lg shadow-lg p-6 w-96">
         {/* Icon and Title */}
         <div className="flex items-center">

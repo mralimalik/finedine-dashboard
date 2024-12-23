@@ -20,6 +20,7 @@ const AddNewItemSheet = () => {
     editItemData,
     clearItemFields,
     assignItemDataToVariables,
+    updateItem
   } = useContext(MenuContext);
 
   const renderContent = () => {
@@ -85,16 +86,16 @@ const AddNewItemSheet = () => {
             onClick={() => {
               if (loading === false) {
                 try {
-                  setLoading(true);
-
                   setItemLoading(true);
-                  createItem(menuId, selectedVenue);
-                  setItemLoading(false);
+                  if(editItemData){
+                    updateItem(editItemData._id,setLoading);
+                  }else{
+                    createItem(menuId, selectedVenue,setLoading);
+
+                  }
+
                 } catch (e) {
-                  setLoading(false);
-                  setItemLoading(false);
                 } finally {
-                  setLoading(false);
                   setItemLoading(false);
                 }
               }

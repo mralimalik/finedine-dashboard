@@ -6,7 +6,7 @@ import Logo from "../../assets/logo.jpg";
 import "./Sidebar.css";
 
 const Sidebar = ({ isSidebarOpen }) => {
-  let items = ["Dashboard", "Menu Management", "Operations", "Orders"];
+  let items = ["Dashboard", "Menu Management", "Operations", "Orders","Venue Information"];
 
   // State for managing Orders section expansion
   const [isOrdersExpanded, setIsOrdersExpanded] = useState(false);
@@ -46,6 +46,9 @@ const Sidebar = ({ isSidebarOpen }) => {
     } else if (item === "Orders") {
       // Toggle the expanded state when "Orders" is clicked
       setIsOrdersExpanded((prev) => !prev);
+    } else if (item === "Venue Information") {
+      navigate(`${venuePath}/venue-information`);
+      setExpansionFalse();
     }
   };
   const setExpansionFalse = () => {
@@ -80,6 +83,8 @@ const Sidebar = ({ isSidebarOpen }) => {
       } else if (location.pathname.includes(`${venuePath}/orders`)) {
         setSelectedItemIndex(3);
         console.log("navigatig order");
+      }else if (location.pathname.includes(`${venuePath}/venue-information`)) {
+        setSelectedItemIndex(4);
       }
       console.log("navigatig");
     }

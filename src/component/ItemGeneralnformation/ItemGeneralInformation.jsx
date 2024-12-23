@@ -30,9 +30,10 @@ const ItemGeneralInformation = () => {
     assignItemDataToVariables,
     isSoldOut,
     setIsSoldOut,
+    selectedLabels,
+    setSelectedLabels,
   } = useContext(MenuContext);
 
-  const [selectedLabels, setSelectedLabels] = useState([]);
   const [sectionDropdown, setSectionDropdown] = useState([]);
 
   // Dropdown options
@@ -55,7 +56,11 @@ const ItemGeneralInformation = () => {
   };
 
   const handleLabelsChange = (selectedOptions) => {
-    setSelectedLabels(selectedOptions);
+    const updatedSelectedLabels = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    setSelectedLabels(updatedSelectedLabels);
+    console.log(selectedLabels);
   };
 
   const handleToggleSoldOut = () => {
@@ -133,47 +138,10 @@ const ItemGeneralInformation = () => {
     }
   };
 
-  // const createItem = async () => {
-  //   const apiUrl = `http://localhost:3000/menu/menuitem/${menuId}`;
-  //   const venueId = selectedVenue._id;
-  //   const token = localStorage.getItem("Token");
-  //   try {
-  //     // Create FormData object
-  //     const data = new FormData();
-  //     data.append("itemName",itemName);
-  //     data.append("venueId", venueId);
-  //     if (sectionParentId) data.append("parentId", sectionParentId);
-  //     data.append("itemImage", itemImage);
-  //     data.append("price", price);
-  //     if(description)
-  //     data.append("description", description);
-
-  //     // Send the POST request
-  //     const response = await axios.post(apiUrl, data, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     console.log("API Response:", response.data.data);
-  //   } catch (error) {
-  //     console.error("Error creating item:", error.response || error.message);
-  //   } finally {
-  //   }
-  // };
   // handle section change
   const handleParentChange = (selectedOption) => {
     setSectionParentId(selectedOption ? selectedOption.value : null);
   };
-  // useEffect(() => {
-  //   if (editItemData) {
-  //     assignItemDataToVariables(editItemData);
-  //   } 
-  //   else {
-  //     clearItemFields();
-  //   }
-  // }, [editItemData]);
 
   useEffect(() => {
     initializeSectionDropdownOptions(menuData);
@@ -215,21 +183,21 @@ const ItemGeneralInformation = () => {
               className="w-full h-full object-cover"
             />
           )} */}
-             {itemImage ? (
-              itemImage instanceof File ? (
-                <img
-                  src={URL.createObjectURL(itemImage)}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <img
-                  src={itemImage}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              )
-            ) : null}
+          {itemImage ? (
+            itemImage instanceof File ? (
+              <img
+                src={URL.createObjectURL(itemImage)}
+                alt="Preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={itemImage}
+                alt="Preview"
+                className="w-full h-full object-cover"
+              />
+            )
+          ) : null}
         </div>
       </div>
 
@@ -259,7 +227,9 @@ const ItemGeneralInformation = () => {
           placeholder="Select labels"
           className="label-select text-sm"
           classNamePrefix="select"
-          value={selectedLabels}
+          value={labelOptions.filter((option) =>
+            selectedLabels.includes(option.value)
+          )} // Use value instead of label for matching
           onChange={handleLabelsChange}
           styles={customStyles}
         />

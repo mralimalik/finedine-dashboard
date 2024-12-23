@@ -5,11 +5,21 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
 import { baseUrl } from "../../const/constants.js";
 import { VenueContext } from "../../context/VenueContext.jsx";
+import AddModifierGroupForm from "../AddModifierGroupForm/AddModifierGroupForm.jsx";
 const ModifierGroupTable = () => {
   const { allModifierData, setModifierData, fetchModifiersByVenue } =
     useContext(ModifierContext);
-  const { selectedVenue,setLoading } = useContext(AuthContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
   // const { setLoading } = useContext(VenueContext);
+
+  const [modifierEditData, setModifierEditData] = useState(null);
+  const [isEditOpen, setEditOpen] = useState(false);
+
+  const handleEdit = (id) => {
+    const modifier = allModifierData.find((item) => item._id === id);
+    setModifierEditData(modifier);
+    setEditOpen(true);
+  };
 
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -22,12 +32,6 @@ const ModifierGroupTable = () => {
         return [...prevSelectedRows, id];
       }
     });
-  };
-
-  // Handle edit button click
-  const handleEdit = (id) => {
-    console.log("Edit item with id:", id);
-    // Implement edit functionality here
   };
 
   //   // Handle delete button click
@@ -152,6 +156,12 @@ const ModifierGroupTable = () => {
         <div className="w-full h-52 flex items-center justify-center">
           No Modifier Added
         </div>
+      )}
+      {isEditOpen && (
+        <AddModifierGroupForm
+          onClose={() => setEditOpen(false)}
+          initialData={modifierEditData}
+        />
       )}
     </div>
   );

@@ -14,6 +14,8 @@ import { ModifierContextProvider } from "./context/ModifierContext.jsx";
 import AllOrders from "./pages/Orders/AllOrders/AllOrders.jsx";
 import { OrderContextProvider } from "./context/OrderContext.jsx";
 import OrderSettings from "./pages/Orders/OrderSettings/OrderSettings.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
+import VenueInfoPage from "./pages/VenueInfoPage/VenueInfoPage.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -22,34 +24,56 @@ function App() {
           <VenueContextProvider>
             <MenuContextProvider>
               <ModifierContextProvider>
-              <TableContextProvider>
-              <OrderContextProvider>
-                <Routes>
-                  {/* Default Route */}
-                  <Route path="/" element={<Navigate to="/login" replace />} />
+                <TableContextProvider>
+                  <OrderContextProvider>
+                    <Routes>
+                      {/* Default Route */}
+                      <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                      />
 
-                  {/* Login Page */}
-                  <Route path="login" element={<Login />} />
+                      {/* Login Page */}
+                      <Route path="login" element={<Login />} />
 
-                  {/* Protected Routes */}
-                  <Route path="venue/:venueId?" element={<Main />}>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="menu-management" element={<MenuManagement />}/>
-                    <Route path="menu-management/:menuId" element={<MenuEditor />} />
+                      {/* Protected Routes */}
+                      <Route path="venue/:venueId?" element={<Main />}>
+                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route
+                          path="menu-management"
+                          element={<MenuManagement />}
+                        />
+                        <Route
+                          path="menu-management/:menuId"
+                          element={<MenuEditor />}
+                        />
 
-                    <Route path="operations" element={<OperationMain />}/>
-                    <Route path="orders/all-orders" element={<AllOrders />} />
-                    <Route path="orders/order-settings" element={<OrderSettings />} />
-                  </Route>
+                        <Route path="operations" element={<OperationMain />} />
+                        <Route
+                          path="orders/all-orders"
+                          element={<AllOrders />}
+                        />
+                        <Route
+                          path="orders/order-settings"
+                          element={<OrderSettings />}
+                        />
+                        <Route
+                          path="venue-information"
+                          element={<VenueInfoPage />}
+                        />
+                      </Route>
+                      
+                      <Route path="account/profile" element={<Profile />} />
 
-
-                  {/* Catch-all Route */}
-                  <Route path="*" element={<Navigate to="/login" replace />} />
-                </Routes>
-                </OrderContextProvider>
-              </TableContextProvider>
+                      {/* Catch-all Route */}
+                      <Route
+                        path="*"
+                        element={<Navigate to="/login" replace />}
+                      />
+                    </Routes>
+                  </OrderContextProvider>
+                </TableContextProvider>
               </ModifierContextProvider>
-            
             </MenuContextProvider>
           </VenueContextProvider>
         </SidebarContextProvider>

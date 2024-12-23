@@ -11,6 +11,11 @@ const Navbar = ({ toggleSidebar }) => {
     localStorage.removeItem("Token");
     navigate("/login");
   };
+
+  const handleProfileNavigate = ()=>{
+    navigate('/account/profile');
+  }
+
   return (
     <div className="navbar-items w-full bg-white px-4 py-2 flex justify-end items-center gap-2">
       <button
@@ -37,7 +42,7 @@ const Navbar = ({ toggleSidebar }) => {
           placeholder="Search"
           required
         /> */}
-        <div className="account-avatar"></div>
+        <div className="account-avatar" onClick={handleProfileNavigate}></div>
       </div>
     </div>
   );

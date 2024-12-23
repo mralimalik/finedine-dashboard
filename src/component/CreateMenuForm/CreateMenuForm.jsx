@@ -8,9 +8,11 @@ import { VenueContext } from "../../context/VenueContext";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 const CreateMenuForm = ({ isOpen, onClose }) => {
-  const { venueId } = useParams();
-  const { setMenuItems } = useContext(MenuContext);
   const [selectedOption, setSelectedOption] = useState(null);
+
+  const { venueId } = useParams();
+
+  const { setMenuItems } = useContext(MenuContext);
   const { setLoading } = useContext(AuthContext);
 
   const menuOptions = [
@@ -87,6 +89,7 @@ const CreateMenuForm = ({ isOpen, onClose }) => {
       await createSampleMenuWithItem();
     }
   };
+
   return (
     <div className="modal-overlay">
       <div className="menu-modal-container">

@@ -10,6 +10,15 @@ import "./ResponsiveAddSectionSheet.css";
 import { baseUrl } from "../../const/constants.js";
 import { toast } from "react-toastify";
 const AddNewSectionSheet = ({}) => {
+  // for input data
+  const [formData, setFormData] = useState({
+    name: "",
+    image: null,
+  });
+
+  const [loading, setSaveLoading] = useState(false);
+  const [dropdownOption, setDropdownOptions] = useState([]);
+
   const { menuId } = useParams();
   const { selectedVenue, setLoading } = useContext(AuthContext);
 
@@ -22,15 +31,6 @@ const AddNewSectionSheet = ({}) => {
     closeSectionSheet,
     editSectionData,
   } = useContext(MenuContext);
-
-  // for input data
-  const [formData, setFormData] = useState({
-    name: "",
-    image: null,
-  });
-
-  const [loading, setSaveLoading] = useState(false);
-  const [dropdownOption, setDropdownOptions] = useState([]);
 
   // handle input field change
   const handleChange = (e) => {
@@ -173,7 +173,7 @@ const AddNewSectionSheet = ({}) => {
 
       closeSectionSheet();
     } catch (error) {
-      toast.error("Something went wrong, Try Again")
+      toast.error("Something went wrong, Try Again");
       console.error("Error updating form:", error.response || error.message);
     } finally {
       setSaveLoading(false);

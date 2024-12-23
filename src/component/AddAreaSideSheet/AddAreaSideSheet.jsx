@@ -3,17 +3,32 @@ import Select from "react-select"; // Import React-Select
 import "./AddAreaSideSheet.css";
 import { TableContext } from "../../context/TablesContext.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import './ResponsiveAddAreaSheet.css'
+import "./ResponsiveAddAreaSheet.css";
 const AddAreaSideSheet = () => {
+  // for area name
   const [areaName, setAreaName] = useState("");
+  // to assign tables
   const [assignTables, setAssignTables] = useState([]);
-  const [isAvailable, setIsAvailable] = useState(false);
-  const [tableOptions, setTableOptions] = useState([]); // Dynamic table options
+  // show aviable table options
+  const [tableOptions, setTableOptions] = useState([]);
 
-  const { isAreaSheetOpen, toggleAreaSideSheet, createArea, areas } = useContext(TableContext);
-  const { selectedVenue,setLoading } = useContext(AuthContext);
+  const { isAreaSheetOpen, toggleAreaSideSheet, createArea, areas } =
+    useContext(TableContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
 
-  // Transform the areas data into the structure for React-Select
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+
+      const assignedTableValues = assignTables.map((table) => table.value);
+      await createArea(areaName, selectedVenue._id, assignedTableValues);
+      toggleAreaSideSheet();
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (areas?.length > 0) {
       const options = areas.map((area) => ({
@@ -26,20 +41,6 @@ const AddAreaSideSheet = () => {
       setTableOptions(options);
     }
   }, [areas]);
-
-  const handleSubmit = async () => {
-   try{
-    setLoading(true);
-
-    const assignedTableValues = assignTables.map((table) => table.value); 
-    await createArea(areaName, selectedVenue._id,assignedTableValues);
-    toggleAreaSideSheet();
-   }catch(e){
-
-   }finally{
-    setLoading(false);
-   }
-  };
 
   return (
     <div>
@@ -80,19 +81,6 @@ const AddAreaSideSheet = () => {
                   classNamePrefix="select"
                 />
               </div>
-
-              {/* Toggle Available */}
-              {/* <div className="form-group toggle-container">
-                <label className="toggle-label">
-                  Available in online reservation
-                </label>
-                <input
-                  type="checkbox"
-                  checked={isAvailable}
-                  onChange={(e) => setIsAvailable(e.target.checked)}
-                  className="toggle-switch"
-                />
-              </div> */}
 
               {/* Footer Buttons */}
               <div className="side-sheet-footer">

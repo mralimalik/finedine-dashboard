@@ -22,7 +22,7 @@ const Dashboard = () => {
    <div>
    <div className="welcome-div">
         <p className="date-text">{formattedDate}</p>
-        <p className="current-user-text">{userData.email},Welcome</p>
+        <p className="current-user-text">{userData ? `${userData.email},`:""}Welcome</p>
       </div>
       <div className="flex gap-4 responsive-div">
         <div className="dashboard-qr-container">

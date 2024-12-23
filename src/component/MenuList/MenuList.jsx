@@ -10,15 +10,22 @@ import "./ResponsiveMenuList.css";
 import { baseUrl } from "../../const/constants.js";
 import { VenueContext } from "../../context/VenueContext.jsx";
 import { MdDragHandle } from "react-icons/md";
+import EditMenuSideSheet from "../EditMenuSideSheet/EditMenuSideSheet.jsx";
 const MenuList = () => {
   const navigate = useNavigate();
-  const { setMenuItems, menuItems, formatDate } = useContext(MenuContext);
-  const { selectedVenue,setLoading } = useContext(AuthContext);
+  // holds the value of menu list and section (menuData)
+  const { setMenuItems, menuItems, formatDate, menuData } =
+    useContext(MenuContext);
+  const { selectedVenue, setLoading } = useContext(AuthContext);
   const { orderSettings } = useContext(OrderContext);
 
-  // const {setLoading} = useContext(VenueContext);
-
   const [draggedIndex, setDraggedIndex] = useState(null);
+
+  const [activeEditMenuId, setActiveEditMenuId] = useState(null);
+
+  const handleEditMenuSheet = (menuId) => {
+    setActiveEditMenuId((prevId) => (prevId === menuId ? null : menuId));
+  };
 
   const handleDragStart = (index) => {
     setDraggedIndex(index);
@@ -48,32 +55,21 @@ const MenuList = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("Token");
-      const response = await axios.get(
-        `${baseUrl}/menu/${selectedVenue._id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${baseUrl}/menu/${selectedVenue._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setMenuItems(response.data.data || []);
 
       console.log("response", response.data.data);
       // setLoading(false);
-
     } catch (err) {
       // setLoading(false);
 
       console.log(err);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
-  // const handleMenuActive = async (index) => {
-  //   const updatedMenus = [...menuItems];
-  //   updatedMenus[index].isActive = !updatedMenus[index].isActive;
-
-  //   setMenuItems(updatedMenus);
-  // };
-
   const handleMenuActive = async (index) => {
     try {
       setLoading(true);
@@ -100,9 +96,8 @@ const MenuList = () => {
     } catch (error) {
       console.error("Error updating menu isActive:", error);
       alert("Failed to update menu. Please try again.");
-    }finally{
+    } finally {
       setLoading(false);
-
     }
   };
 
@@ -138,7 +133,7 @@ const MenuList = () => {
             onClick={() => handleMenuClick(data._id)}
           >
             <div className="card-left-div ">
-              <div className="menu-drag-handle-nograb">{<MdDragHandle/>}</div>
+              <div className="menu-drag-handle-nograb">{<MdDragHandle />}</div>
               <div className="menu-card-list">
                 <div className="title-row">
                   <p className="menu-title">{data.menuName}</p>
@@ -177,8 +172,17 @@ const MenuList = () => {
                 onToggle={() => {
                   handleMenuActive(index);
                 }}
+                menuId={data._id}
+                editMenu={() => handleEditMenuSheet(data._id)}
               />
             </div>
+            {activeEditMenuId === data._id && (
+              <EditMenuSideSheet
+                menuId={data._id}
+                initialMenuName={data.menuName}
+                onClose={() => setActiveEditMenuId(null)}
+              />
+            )}
           </div>
         ))
       )}

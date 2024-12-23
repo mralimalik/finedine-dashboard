@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './ReuseTextField.css'
-const ReuseTextField = ({ label, name, required, placeholder, value, onChange ,className }) => {
+const ReuseTextField = ({ label, name, required, placeholder, value, onChange ,className,type='text' }) => {
   const [error, setError] = useState("");
 
   const handleBlur = () => {
@@ -18,7 +18,8 @@ const ReuseTextField = ({ label, name, required, placeholder, value, onChange ,c
         {label && (required && <span className="required text-red-400">*</span>)}
       </label>
       <input
-        type="text"
+      
+        type={type}
         name={name}
         placeholder={placeholder}
         value={value}
@@ -27,6 +28,7 @@ const ReuseTextField = ({ label, name, required, placeholder, value, onChange ,c
         className={`text-field-input ${error ? "error" : ""} ${className}`}
       />
       {error && <span className="error-message">{error}</span>}
+      
     </div>
   );
 };

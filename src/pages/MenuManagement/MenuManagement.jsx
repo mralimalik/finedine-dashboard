@@ -9,12 +9,12 @@ import ModifierGroupTable from "../../component/ModifierGroupTable/ModifierGroup
 import LoadingIndicator from "../../component/LoadingIndicator/LoadingIndicator.jsx";
 import { VenueContext } from "../../context/VenueContext.jsx";
 const MenuManagement = () => {
+  // handle tab
   const [activeTab, setActiveTab] = useState("menu");
 
+  // for opening form of adding modifier or menu
   const [selectedForm, setSelectedForm] = useState(null);
-  const { selectedVenue,loading } = useContext(AuthContext);
-
-  // const {loading} = useContext(VenueContext);
+  const { selectedVenue } = useContext(AuthContext);
 
   const handleOpenMenuForm = () => {
     if (activeTab === "menu") {
@@ -34,10 +34,7 @@ const MenuManagement = () => {
       <div className="menu-heading-row">
         <h2 className="text-xl">Menu Management</h2>
         {selectedVenue && (
-          <button
-            className="create-menu-button"
-            onClick={handleOpenMenuForm}
-          >
+          <button className="create-menu-button" onClick={handleOpenMenuForm}>
             {activeTab === "menu" ? "Create Menu" : "Add Modifier Group"}
           </button>
         )}
@@ -56,24 +53,15 @@ const MenuManagement = () => {
           Modifiers
         </button>
       </div>
-        {
-          activeTab==="menu" && (
-            <MenuList />
-          )
-        }
-          {
-          activeTab==="modifier" && (
-            <ModifierGroupTable/>
-          )
-        }
+      {activeTab === "menu" && <MenuList />}
+      {activeTab === "modifier" && <ModifierGroupTable />}
       {selectedForm === "createMenu" && (
         <CreateMenuForm isOpen={selectedForm} onClose={handleCloseForm} />
       )}
       {selectedForm === "addModifier" && (
         <AddModifierGroupForm isOpen={selectedForm} onClose={handleCloseForm} />
       )}
-        {/* <LoadingIndicator loading={loading}/> */}
-
+      {/* <LoadingIndicator loading={loading}/> */}
     </div>
   );
 };

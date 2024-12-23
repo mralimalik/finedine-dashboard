@@ -10,6 +10,7 @@ const VenueInfoPage = () => {
   const [formData, setFormData] = useState({
     venueName: "",
     country: "",
+    image: null,
   });
 
   const { selectedVenue, setLoading, setSelectedVenue, setUserVenues } =
@@ -59,7 +60,7 @@ const VenueInfoPage = () => {
       console.error("Error updating venue:", error);
     }
   };
-  
+
   // update the local variables
   const handleVenueLocalUpdate = () => {
     // update the selected venue map
@@ -114,6 +115,21 @@ const VenueInfoPage = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
+                <label
+                  htmlFor="venueId"
+                  className="block text-sm font-medium text-gray-700 my-2"
+                >
+                  Venue Id
+                </label>
+                <input
+                  type="text"
+                  id="venueId"
+                  name="venueId"
+                  value={selectedVenue?.venueId}
+                  // onChange={handleChange}
+                  disabled={true}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-400"
+                />
                 <SelectVenueCountryDropdown
                   value={formData.country}
                   mainClassname={
@@ -122,6 +138,40 @@ const VenueInfoPage = () => {
                   dropdownClass={"border py-2 px-2 outline-none rounded-md"}
                   onChange={(e) => handleChange(e)}
                 />
+                <div>
+                  {/* <div className="item-image-div my-2">
+                    <label
+                      htmlFor="logo"
+                      className="block text-sm font-medium text-gray-700 my-2"
+                    >
+                      Logo
+                    </label>{" "}
+                    <div
+                      className="image-picker-div h-28 w-44 bg-violet-200 rounded-md cursor-pointer flex items-center justify-center overflow-hidden"
+                      onClick={() =>
+                        document.getElementById("itemImage").click()
+                      }
+                    >
+                      <input className="hidden" type="file" id="itemImage" />
+                      {!formData.image && <h2>Pick Image</h2>}
+                      {formData.image ? (
+                        formData.image instanceof File ? (
+                          <img
+                            src={URL.createObjectURL(formData.image)}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={formData.image}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        )
+                      ) : null}
+                    </div>
+                  </div> */}
+                </div>
               </div>
 
               <button

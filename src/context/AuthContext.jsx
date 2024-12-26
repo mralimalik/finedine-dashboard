@@ -110,6 +110,7 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+ 
   useEffect(() => {
     getUserDataLocal();
   }, []);

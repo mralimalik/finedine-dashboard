@@ -199,50 +199,158 @@ export const TableContextProvider = ({ children }) => {
   };
 
   // to download qr code of selected tables
-  const handleDownloadQRCode = (venueId) => {
+  // const handleDownloadQRCode = (venueId) => {
+  //   // Create a new JSZip instance to create a zip file
+  //   const zip = new JSZip();
+
+  //   // Create a folder named "QR_Codes" inside the zip file
+  //   const folder = zip.folder("QR_Codes");
+
+  //   // Iterate over the selected table IDs
+  //   selectedTables.forEach((tableId) => {
+  //     // Find the table object using the tableId by searching through all areas and their tables
+  //     const table = areas
+  //       .flatMap((area) => area.tables)
+  //       .find((table) => table._id === tableId);
+
+  //     // If the table exists, generate a QR code for it
+  //     if (table) {
+  //       // Construct the URL for the QR code with the venueId and tableId
+  //       const qrCodeUrl = `${qrlink}${venueId}?table=${tableId}`;
+
+  //       // Create a new canvas element to render the QR code
+  //       const canvas = document.createElement("canvas");
+
+  //       // Generate the QR code and render it on the canvas
+  //       QRCode.toCanvas(canvas, qrCodeUrl, { width: 200 }, (error) => {
+  //         if (error) {
+  //           // Log an error if there's an issue generating the QR code
+  //           console.error("Error generating QR code", error);
+  //         } else {
+  //           // Convert the canvas to a data URL, which represents the QR code image as a base64 string
+  //           const dataUrl = canvas.toDataURL();
+
+  //           // Remove the "data:image/png;base64," part of the data URL to get the base64 image data
+  //           const imageData = dataUrl.split(",")[1];
+
+  //           // Add the QR code image to the zip file in the folder "QR_Codes" with a filename using the table name
+  //           folder.file(`${table.tableName}_QRCode.png`, imageData, {
+  //             base64: true,
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   // Once all the QR codes are generated, create and download the zip file
+  //   zip.generateAsync({ type: "blob" }).then((content) => {
+  //     // Create a link element to trigger the download of the zip file
+  //     const link = document.createElement("a");
+
+  //     // Create a URL for the zip content (blob URL) and set it as the link's href attribute
+  //     link.href = URL.createObjectURL(content);
+
+  //     // Set the download attribute to specify the name of the downloaded file
+  //     link.download = "QR_Codes.zip";
+
+  //     // Trigger a click event on the link to start the download
+  //     link.click();
+  //   });
+  // };
+
+  // Function to generate a QR code with added text and white background
+  const generateQRCodeWithText = async (venueId, tableId, tableName) => {
+    try {
+      // Generate the QR code as a data URL
+      const url = await QRCode.toDataURL(
+        `${qrlink}${venueId}?table=${tableId}`,
+        {
+          color: {
+            dark: "#8A2BE2", // Blue-Violet color for the QR code
+            light: "#FFFFFF", // White background
+          },
+          width: 300, // Set the width of the QR code
+          margin: 1, // Set margin around the QR code
+        }
+      );
+
+      // Create a canvas to combine QR code and table name
+      const canvas = document.createElement("canvas");
+      const img = new Image();
+      img.src = url;
+
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          // Set canvas size based on the image size, plus space for table name
+          canvas.width = img.width;
+          canvas.height = img.height + 40; // Extra space for table name below the QR code
+
+          const ctx = canvas.getContext("2d");
+
+          // Fill the canvas with a white background
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Draw the QR code onto the canvas
+          ctx.drawImage(img, 0, 0);
+
+          // Set font and draw the table name below the QR code
+          ctx.font = "20px Arial";
+          ctx.fillStyle = "#000000"; // Black text color
+          ctx.fillText(`Table: ${tableName}`, 10, img.height + 30);
+
+          // Resolve the promise with the base64 image data
+          resolve(canvas.toDataURL());
+        };
+
+        img.onerror = (error) => reject(error); // Handle error if image fails to load
+      });
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      throw error;
+    }
+  };
+
+  // to downlaod qr code in zip
+  const handleDownloadQRCode = async (venueId) => {
     // Create a new JSZip instance to create a zip file
     const zip = new JSZip();
 
     // Create a folder named "QR_Codes" inside the zip file
     const folder = zip.folder("QR_Codes");
 
-    // Iterate over the selected table IDs
-    selectedTables.forEach((tableId) => {
-      // Find the table object using the tableId by searching through all areas and their tables
+    // Iterate over the selected table IDs and generate QR codes with table names
+    const promises = selectedTables.map(async (tableId) => {
+      // Find the table object using the tableId
       const table = areas
         .flatMap((area) => area.tables)
         .find((table) => table._id === tableId);
 
-      // If the table exists, generate a QR code for it
       if (table) {
-        // Construct the URL for the QR code with the venueId and tableId
-        const qrCodeUrl = `${qrlink}${venueId}?table=${tableId}`;
+        try {
+          // Generate the QR code with table name and white background
+          const imageData = await generateQRCodeWithText(
+            venueId,
+            tableId,
+            table.tableName
+          );
 
-        // Create a new canvas element to render the QR code
-        const canvas = document.createElement("canvas");
-
-        // Generate the QR code and render it on the canvas
-        QRCode.toCanvas(canvas, qrCodeUrl, { width: 200 }, (error) => {
-          if (error) {
-            // Log an error if there's an issue generating the QR code
-            console.error("Error generating QR code", error);
-          } else {
-            // Convert the canvas to a data URL, which represents the QR code image as a base64 string
-            const dataUrl = canvas.toDataURL();
-
-            // Remove the "data:image/png;base64," part of the data URL to get the base64 image data
-            const imageData = dataUrl.split(",")[1];
-
-            // Add the QR code image to the zip file in the folder "QR_Codes" with a filename using the table name
-            folder.file(`${table.tableName}_QRCode.png`, imageData, {
-              base64: true,
-            });
-          }
-        });
+          // Add the generated QR code image to the zip file
+          folder.file(
+            `${table.tableName}_QRCode.png`,
+            imageData.split(",")[1],
+            { base64: true }
+          );
+        } catch (error) {
+          console.error("Error generating QR code for table:", tableId, error);
+        }
       }
     });
 
-    // Once all the QR codes are generated, create and download the zip file
+    // Wait for all QR codes to be generated
+    await Promise.all(promises);
+
+    // Once all QR codes are generated, create and download the zip file
     zip.generateAsync({ type: "blob" }).then((content) => {
       // Create a link element to trigger the download of the zip file
       const link = document.createElement("a");
@@ -293,6 +401,7 @@ export const TableContextProvider = ({ children }) => {
         toggleEditTableSheet,
         setTableForEditing,
         tableToEdit,
+        generateQRCodeWithText,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ const UpdateTableSheet = () => {
     toggleEditTableSheet,
     openTableEditSheet,
     tableToEdit,
+    generateQRCodeWithText
   } = useContext(TableContext);
   const { selectedVenue, setLoading } = useContext(AuthContext);
 
@@ -163,6 +164,7 @@ const UpdateTableSheet = () => {
     setAreas(updatedAreas);
   };
 
+  // generate qr code link preview
   const generateQRCode = async () => {
     try {
       const url = await QRCode.toDataURL(
@@ -180,11 +182,17 @@ const UpdateTableSheet = () => {
     }
   };
 
-  const handleDownloadQrCode = () => {
-    const link = document.createElement("a");
-    link.href = qrCodeUrl;
-    link.download = `${table.tableName}_QRCode.png`;
-    link.click();
+  // to downlaod qr code single
+  const handleDownloadQrCode = async () => {
+    try {
+      const url = await generateQRCodeWithText(selectedVenue.venueId, tableToEdit._id, table.tableName); 
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${table.tableName}_QRCode.png`;
+      link.click();
+    } catch (error) {
+      console.error("Error downloading QR code:", error);
+    }
   };
 
   useEffect(() => {

@@ -48,7 +48,7 @@ const Dashboard = () => {
           >
             Preview
           </button> */}
-              <a
+              {/* <a
                 href={previewLink}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -61,7 +61,7 @@ const Dashboard = () => {
                 }}
               >
                 Preview
-              </a>
+              </a> */}
             </div>
 
             <div className="phone-qr-position-div">
@@ -90,12 +90,13 @@ export default Dashboard;
 export const PagePreview = ({ venueId }) => {
   return (
     <div className="w-[240px]  relative rounded-lg">
-      <div className="w-full h-full scale-[0.458] origin-top-left  absolute z-50 top-[20px] left-[10px] rounded-lg  iframe-main-div">
+      <div className="w-full h-full scale-[0.458] origin-top-left  absolute z-50 top-[7px] left-[10px] rounded-lg  iframe-main-div">
         <iframe
-          className="w-[450px] h-[820px] rounded-lg  iframe-div"
+          className="w-[450px] h-[820px] rounded-lg  iframe-div "
           src={`https://qr-menu-frontend-beryl.vercel.app/${venueId}`}
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           allowFullScreen={false}
+          
         />
       </div>
       <div className="w-[850px] h-[700px]  absolute z-40 -top-[280px] -left-[150px]  flex justify-start items-start  scale-[0.6] origin-bottom-left mobile-frame-div">

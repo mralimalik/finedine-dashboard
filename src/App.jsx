@@ -16,6 +16,7 @@ import { OrderContextProvider } from "./context/OrderContext.jsx";
 import OrderSettings from "./pages/Orders/OrderSettings/OrderSettings.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import VenueInfoPage from "./pages/VenueInfoPage/VenueInfoPage.jsx";
+import Reports from "./pages/Reports/Reports.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -61,8 +62,9 @@ function App() {
                           path="venue-information"
                           element={<VenueInfoPage />}
                         />
+                        <Route path="reports" element={<Reports />} />
                       </Route>
-                      
+
                       <Route path="account/profile" element={<Profile />} />
 
                       {/* Catch-all Route */}

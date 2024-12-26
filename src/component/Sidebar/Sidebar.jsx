@@ -6,13 +6,20 @@ import Logo from "../../assets/logo.jpg";
 import "./Sidebar.css";
 
 const Sidebar = ({ isSidebarOpen }) => {
-  let items = ["Dashboard", "Menu Management", "Operations", "Orders","Venue Information"];
+  let items = [
+    "Dashboard",
+    "Menu Management",
+    "Operations",
+    "Orders",
+    "Venue Information",
+    "Reports",
+  ];
 
   // State for managing Orders section expansion
   const [isOrdersExpanded, setIsOrdersExpanded] = useState(false);
 
   // Getting current venue data
-  const { selectedVenue } = useContext(AuthContext);
+  const { selectedVenue,userData } = useContext(AuthContext);
 
   // Getting selected item (route) index, handle venue switch popup from sidebar context
   const { selectedItemIndex, setSelectedItemIndex, handleVenuePopUp } =
@@ -49,6 +56,9 @@ const Sidebar = ({ isSidebarOpen }) => {
     } else if (item === "Venue Information") {
       navigate(`${venuePath}/venue-information`);
       setExpansionFalse();
+    } else if (item === "Reports") {
+      navigate(`${venuePath}/reports`);
+      setExpansionFalse();
     }
   };
   const setExpansionFalse = () => {
@@ -83,8 +93,10 @@ const Sidebar = ({ isSidebarOpen }) => {
       } else if (location.pathname.includes(`${venuePath}/orders`)) {
         setSelectedItemIndex(3);
         console.log("navigatig order");
-      }else if (location.pathname.includes(`${venuePath}/venue-information`)) {
+      } else if (location.pathname.includes(`${venuePath}/venue-information`)) {
         setSelectedItemIndex(4);
+      }else if (location.pathname.includes(`${venuePath}/reports`)) {
+        setSelectedItemIndex(5);
       }
       console.log("navigatig");
     }
@@ -92,8 +104,8 @@ const Sidebar = ({ isSidebarOpen }) => {
 
   return (
     <div className={`sidebar `}>
-      <div className="image-log flex justify-between items-center ">
-        <img src={Logo} alt="" className="logo-img h-11 m-3" />
+      <div className="image-log flex justify-between items-center p-3">
+        <img src={`${userData.businessLogo?userData.businessLogo:Logo}`} alt="" className="logo-img h-14  rounded-lg" />
         {/* <h3>Close</h3> */}
       </div>
 

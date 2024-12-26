@@ -115,6 +115,20 @@ const MenuList = () => {
     fetchMenus();
   }, [selectedVenue]);
 
+  const isOrderingEnabled = (venueOrderSettings, menuOrderSettings) => {
+    const overallEnabled =
+      venueOrderSettings?.settings?.dineIn?.orderEnabled ||
+      // venueOrderSettings?.settings?.pickup?.orderEnabled ||
+      venueOrderSettings?.settings?.delivery?.orderEnabled;
+
+    const menuEnabled =
+      menuOrderSettings?.dineIn?.orderEnabled ||
+      // menuOrderSettings?.pickup?.orderEnabled ||
+      menuOrderSettings?.delivery?.orderEnabled;
+
+    return overallEnabled && menuEnabled;
+  };
+
   return (
     <div>
       {menuItems.length === 0 ? (
@@ -138,9 +152,7 @@ const MenuList = () => {
                 <div className="title-row">
                   <p className="menu-title">{data.menuName}</p>
                   {data.isActive && <div className="active-menu-div">Live</div>}
-                  {(orderSettings?.settings?.dineIn?.orderEnabled ||
-                    orderSettings?.settings?.pickup?.orderEnabled ||
-                    orderSettings?.settings?.delivery?.orderEnabled) && (
+                  {isOrderingEnabled(orderSettings, data.orderSettings) && (
                     <div className="active-order-menu-div">
                       Ordering Enabled
                     </div>
@@ -156,12 +168,16 @@ const MenuList = () => {
                   </p>
 
                   <div className="flex hide-orderinfo">
-                    <OrderInfo orderSettings={orderSettings} />
+                    <OrderInfo
+                      menuOrderSettings={data?.orderSettings}
+                    />
                   </div>
                 </div>
 
                 <div className="hidden show-orderinfo">
-                  <OrderInfo orderSettings={orderSettings} />
+                  <OrderInfo
+                    menuOrderSettings={data?.orderSettings}
+                  />
                 </div>
               </div>
             </div>
@@ -179,7 +195,7 @@ const MenuList = () => {
             {activeEditMenuId === data._id && (
               <EditMenuSideSheet
                 menuId={data._id}
-                initialMenuName={data.menuName}
+                initialMenuData={data}
                 onClose={() => setActiveEditMenuId(null)}
               />
             )}
@@ -192,13 +208,17 @@ const MenuList = () => {
 
 export default MenuList;
 
-// Reusable OrderInfo component
-const OrderInfo = ({ orderSettings }) => {
+const OrderInfo = ({ venueOrderSettings, menuOrderSettings }) => {
+
+  const dineInEnabled = menuOrderSettings?.dineIn?.orderEnabled;
+  const deliveryEnabled = menuOrderSettings?.delivery?.orderEnabled;
+
   return (
     <>
-      {orderSettings?.settings?.dineIn.orderEnabled && <p>Dine-in QR -</p>}
-      {orderSettings?.settings?.pickup.orderEnabled && <p>Pick-up -</p>}
-      {orderSettings?.settings?.delivery.orderEnabled && <p>Delivery</p>}
+      {dineInEnabled && <p className="mx-1">Dine-in QR</p>}
+
+      {dineInEnabled && deliveryEnabled && <p className="mx-1">-</p>}
+      {deliveryEnabled && <p className="mx-1">Delivery</p>}
     </>
   );
 };

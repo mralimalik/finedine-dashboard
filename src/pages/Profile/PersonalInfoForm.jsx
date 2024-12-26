@@ -3,18 +3,19 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
 import { baseUrl } from "../../const/constants.js";
 import { toast } from "react-toastify";
-
+import LoadingIndicator from "../../component/LoadingIndicator/LoadingIndicator.jsx";
 const PersonalInfoForm = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    businessLogo: null,
   });
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
   });
 
-  const { userData, setLoading } = useContext(AuthContext);
+  const { userData, setLoading, loading } = useContext(AuthContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +32,10 @@ const PersonalInfoForm = () => {
     }
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
+  };
+
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, businessLogo: e.target.files[0] });
   };
 
   // updates the profile name
@@ -51,12 +56,23 @@ const PersonalInfoForm = () => {
         return;
       }
 
-      const response = await axios.put(`${baseUrl}/user/update`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const formDataToSend = new FormData();
+      formDataToSend.append("firstName", formData.firstName);
+      formDataToSend.append("lastName", formData.lastName);
+      if (formData.businessLogo) {
+        formDataToSend.append("businessLogo", formData.businessLogo);
+      }
+
+      const response = await axios.put(
+        `${baseUrl}/user/update`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         toast.success("Profile Updated Successfully");
@@ -74,6 +90,7 @@ const PersonalInfoForm = () => {
       setFormData({
         firstName: userData.firstName || "",
         lastName: userData.lastName || "",
+        businessLogo: userData.businessLogo || null,
       });
     }
   }, [userData]);
@@ -128,7 +145,7 @@ const PersonalInfoForm = () => {
             Email
           </label>
           <input
-          disabled={true}
+            disabled={true}
             type="text"
             id="email"
             name="email"
@@ -136,7 +153,42 @@ const PersonalInfoForm = () => {
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-400"
           />
-       
+          <div className="item-image-div my-2">
+            <label
+              htmlFor="logo"
+              className="block text-base font-medium text-gray-700 my-2"
+            >
+              Business Logo
+            </label>{" "}
+            <div
+              className="image-picker-div h-28 w-44 bg-violet-200 rounded-md cursor-pointer flex items-center justify-center overflow-hidden"
+              onClick={() => document.getElementById("businessLogo").click()}
+            >
+              <input
+                className="hidden"
+                type="file"
+                id="businessLogo"
+                name="businessLogo"
+                onChange={handleImageChange}
+              />
+              {!formData.businessLogo && <h2>Pick Image</h2>}
+              {formData.businessLogo ? (
+                formData.businessLogo instanceof File ? (
+                  <img
+                    src={URL.createObjectURL(formData.businessLogo)}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={formData.businessLogo}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                  />
+                )
+              ) : null}
+            </div>
+          </div>
         </div>
 
         <button
@@ -146,6 +198,7 @@ const PersonalInfoForm = () => {
           Save
         </button>
       </form>
+      <LoadingIndicator loading={loading} />
     </div>
   );
 };

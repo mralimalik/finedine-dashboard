@@ -6,6 +6,7 @@ import { AuthContext } from "../../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../const/constants.js";
 import { toast } from "react-toastify";
+import SelectVenueCountryDropdown from "../SelectVenueCountryDropdown/SelectVenueCountryDropdown.jsx";
 const AddVenueModal = ({ isOpen, onClose }) => {
   const [venueName, setVenueName] = useState("");
   const [country, setCountry] = useState("");
@@ -15,7 +16,7 @@ const AddVenueModal = ({ isOpen, onClose }) => {
   // for venue modal dialog ref
   const { venueModalRef } = useContext(VenueContext);
 
-  // getting all venues, selected current venue, seting current venue
+  // getting all venues, selected current venue, setting current venue
   const {
     setUserVenues,
     selectedVenue,
@@ -53,10 +54,10 @@ const AddVenueModal = ({ isOpen, onClose }) => {
           // if currentVenue is not empty then merge
           setUserVenues((prev) => [...prev, response.data.data]);
         } else {
-          // if currentVenue is  empty then merge, and also set current venue with data
+          // if currentVenue is empty then merge, and also set current venue with data
           setUserVenues((prev) => [...(prev || []), response.data.data]);
           setSelectedVenue(response.data.data);
-          //after setting then navigate with venueId
+          // after setting then navigate with venueId
           navigate(`/venue/${response.data.data.venueId}/dashboard`);
         }
         toast.success("Venue created successfully");
@@ -69,6 +70,7 @@ const AddVenueModal = ({ isOpen, onClose }) => {
       setLoading(false);
     }
   };
+
   if (!isOpen) return null;
 
   return (
@@ -115,32 +117,3 @@ const AddVenueModal = ({ isOpen, onClose }) => {
 };
 
 export default AddVenueModal;
-
-export const SelectVenueCountryDropdown = ({
-  value,
-  onChange,
-  mainClassname,
-  dropdownClass,
-}) => {
-  return (
-    <div className={mainClassname}>
-      <label htmlFor="country">Country</label>
-      <select
-        id="country"
-        name="country"
-        value={value}
-        onChange={onChange}
-        required
-        className={dropdownClass}
-      >
-        <option value="" disabled>
-          Select Country
-        </option>
-        <option value="USA">USA</option>
-        <option value="UK">UK</option>
-        <option value="Canada">Canada</option>
-        <option value="Australia">Australia</option>
-      </select>
-    </div>
-  );
-};

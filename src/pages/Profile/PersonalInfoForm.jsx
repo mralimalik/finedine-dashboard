@@ -14,6 +14,7 @@ const PersonalInfoForm = () => {
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
+    companyName:"",
   });
 
   const { userData, setLoading, loading } = useContext(AuthContext);
@@ -91,6 +92,7 @@ const PersonalInfoForm = () => {
   };
 
   useEffect(() => {
+    
     if (userData) {
       setFormData({
         firstName: userData.firstName || "",
@@ -99,6 +101,8 @@ const PersonalInfoForm = () => {
         companyName: userData.companyName || "",
       });
     }
+    console.log("hello", userData);
+
   }, [userData]);
 
   return (

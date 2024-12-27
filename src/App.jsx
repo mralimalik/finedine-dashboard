@@ -63,9 +63,10 @@ function App() {
                           element={<VenueInfoPage />}
                         />
                         <Route path="reports" element={<Reports />} />
+                      <Route path="profile" element={<Profile />} />
+
                       </Route>
 
-                      <Route path="account/profile" element={<Profile />} />
 
                       {/* Catch-all Route */}
                       <Route

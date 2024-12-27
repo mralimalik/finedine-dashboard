@@ -259,9 +259,60 @@ export const TableContextProvider = ({ children }) => {
   // };
 
   // Function to generate a QR code with added text and white background
+  // const generateQRCodeWithText = async (venueId, tableId, tableName) => {
+  //   try {
+  //     // Generate the QR code as a data URL
+  //     const url = await QRCode.toDataURL(
+  //       `${qrlink}${venueId}?table=${tableId}`,
+  //       {
+  //         color: {
+  //           dark: "#8A2BE2", // Blue-Violet color for the QR code
+  //           light: "#FFFFFF", // White background
+  //         },
+  //         width: 300, // Set the width of the QR code
+  //         margin: 1, // Set margin around the QR code
+  //       }
+  //     );
+
+  //     // Create a canvas to combine QR code and table name
+  //     const canvas = document.createElement("canvas");
+  //     const img = new Image();
+  //     img.src = url;
+
+  //     return new Promise((resolve, reject) => {
+  //       img.onload = () => {
+  //         // Set canvas size based on the image size, plus space for table name
+  //         canvas.width = img.width;
+  //         canvas.height = img.height + 40; // Extra space for table name below the QR code
+
+  //         const ctx = canvas.getContext("2d");
+
+  //         // Fill the canvas with a white background
+  //         ctx.fillStyle = "#FFFFFF";
+  //         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  //         // Draw the QR code onto the canvas
+  //         ctx.drawImage(img, 0, 0);
+
+  //         // Set font and draw the table name below the QR code
+  //         ctx.font = "20px Arial";
+  //         ctx.fillStyle = "#000000"; // Black text color
+  //         ctx.fillText(`Table: ${tableName}`, 10, img.height + 30);
+
+  //         // Resolve the promise with the base64 image data
+  //         resolve(canvas.toDataURL());
+  //       };
+
+  //       img.onerror = (error) => reject(error); // Handle error if image fails to load
+  //     });
+  //   } catch (error) {
+  //     console.error("Error generating QR code:", error);
+  //     throw error;
+  //   }
+  // };
   const generateQRCodeWithText = async (venueId, tableId, tableName) => {
     try {
-      // Generate the QR code as a data URL
+      // Generate the QR code as a data URL with text in the center
       const url = await QRCode.toDataURL(
         `${qrlink}${venueId}?table=${tableId}`,
         {
@@ -274,30 +325,35 @@ export const TableContextProvider = ({ children }) => {
         }
       );
 
-      // Create a canvas to combine QR code and table name
+      // Create a canvas to overlay text on the QR code
       const canvas = document.createElement("canvas");
       const img = new Image();
       img.src = url;
 
       return new Promise((resolve, reject) => {
         img.onload = () => {
-          // Set canvas size based on the image size, plus space for table name
+          // Set canvas size based on the image size
           canvas.width = img.width;
-          canvas.height = img.height + 40; // Extra space for table name below the QR code
+          canvas.height = img.height;
 
           const ctx = canvas.getContext("2d");
-
-          // Fill the canvas with a white background
-          ctx.fillStyle = "#FFFFFF";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
 
           // Draw the QR code onto the canvas
           ctx.drawImage(img, 0, 0);
 
-          // Set font and draw the table name below the QR code
-          ctx.font = "20px Arial";
+          // Set font and measure text width
+          ctx.font = "22px Arial";
+          const textWidth = ctx.measureText(tableName).width;
+          const textX = (canvas.width - textWidth) / 2;
+          const textY = canvas.height / 2 + 10; // Center vertically
+
+          // Draw white background behind the text
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(textX - 10, textY - 30, textWidth + 20, 50);
+
+          // Draw the table name centered in the QR code
           ctx.fillStyle = "#000000"; // Black text color
-          ctx.fillText(`Table: ${tableName}`, 10, img.height + 30);
+          ctx.fillText(`${tableName}`, textX, textY);
 
           // Resolve the promise with the base64 image data
           resolve(canvas.toDataURL());

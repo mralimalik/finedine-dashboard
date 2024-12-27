@@ -12,12 +12,13 @@ import { Outlet, useParams } from "react-router-dom"; // To render the nested ro
 import { VenueContextProvider } from "../../context/VenueContext.jsx";
 import LoadingIndicator from "../../component/LoadingIndicator/LoadingIndicator.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from "react-toastify";
+
 const Main = () => {
   // getting required variables from context
   const { setSwitch, showVeneueSwitchPopUp, venueSwitchRef } =
     useContext(SidebarContext);
-    const {loading} = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
 
   // getting venue id from param
   const { venueId } = useParams();
@@ -64,20 +65,20 @@ const Main = () => {
         }}
       >
         <div className="sidebar-static">
-         <Sidebar/>
+          <Sidebar />
         </div>
 
         <div className="sidebar-responsive hidden">
           {isSidebarOpen && <Sidebar isSidebarOpen={isSidebarOpen} />}
         </div>
-        <LoadingIndicator loading={loading}/>
-        
+        <LoadingIndicator loading={loading} />
+
         <div className="sidebar-page overflow-y-auto">
           <VenueSwitchPopUp />
           <div onClick={() => setIsSidebarOpen(false)} className="h-screen">
             <Navbar toggleSidebar={toggleSidebar} />
             <Outlet />
-            <ToastContainer/>
+            <ToastContainer />
           </div>
         </div>
       </div>

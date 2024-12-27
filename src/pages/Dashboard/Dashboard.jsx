@@ -23,8 +23,8 @@ const Dashboard = () => {
         <div className="welcome-div">
           <p className="date-text">{formattedDate}</p>
           <p className="current-user-text">
-            {Object.keys(userData).length > 0 ? `${userData.email},` : ""}
             Welcome
+            {Object.keys(userData).length > 0 ? `, ${userData.email}` : ""}
           </p>
         </div>
         <div className="flex gap-4 responsive-div">
@@ -96,7 +96,6 @@ export const PagePreview = ({ venueId }) => {
           src={`https://qr-menu-frontend-beryl.vercel.app/${venueId}`}
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           allowFullScreen={false}
-          
         />
       </div>
       <div className="w-[850px] h-[700px]  absolute z-40 -top-[280px] -left-[150px]  flex justify-start items-start  scale-[0.6] origin-bottom-left mobile-frame-div">

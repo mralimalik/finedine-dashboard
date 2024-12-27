@@ -11,11 +11,11 @@ const Navbar = ({ toggleSidebar }) => {
   const { userData } = useContext(AuthContext);
   const handleLogout = () => {
     localStorage.removeItem("Token");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   const handleProfileNavigate = () => {
-    navigate("/account/profile");
+    navigate("/venue/profile");
   };
   const getLettersFromName = () => {
     if (!userData) return "";

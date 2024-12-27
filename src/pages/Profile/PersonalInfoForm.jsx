@@ -9,6 +9,7 @@ const PersonalInfoForm = () => {
     firstName: "",
     lastName: "",
     businessLogo: null,
+    companyName: "",
   });
   const [errors, setErrors] = useState({
     firstName: "",
@@ -29,6 +30,9 @@ const PersonalInfoForm = () => {
     }
     if (!formData.lastName.trim()) {
       formErrors.lastName = "Last Name is required";
+    }
+    if (!formData.companyName.trim()) {
+      formErrors.companyName = "Company Name is required";
     }
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
@@ -59,6 +63,7 @@ const PersonalInfoForm = () => {
       const formDataToSend = new FormData();
       formDataToSend.append("firstName", formData.firstName);
       formDataToSend.append("lastName", formData.lastName);
+      formDataToSend.append("companyName", formData.companyName);
       if (formData.businessLogo) {
         formDataToSend.append("businessLogo", formData.businessLogo);
       }
@@ -91,6 +96,7 @@ const PersonalInfoForm = () => {
         firstName: userData.firstName || "",
         lastName: userData.lastName || "",
         businessLogo: userData.businessLogo || null,
+        companyName: userData.companyName || "",
       });
     }
   }, [userData]);
@@ -153,6 +159,25 @@ const PersonalInfoForm = () => {
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-400"
           />
+          <div className="mt-4">
+            <label
+              htmlFor="companyName"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Company Name
+            </label>
+            <input
+              type="text"
+              id="companyName"
+              name="companyName"
+              value={formData.companyName}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            {errors.companyName && (
+              <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>
+            )}
+          </div>
           <div className="item-image-div my-2">
             <label
               htmlFor="logo"

@@ -172,6 +172,13 @@ export const MenuContextProvider = ({ children }) => {
         updateMenuItems(response.data.data);
         toast.success(`${itemName} added successfully`);
 
+        // Increment the item count in the corresponding menu
+        setMenuItems((prevMenuItems) =>
+          prevMenuItems.map((menu) =>
+            menu._id === menuId ? { ...menu, items: menu.items + 1 } : menu
+          )
+        );
+
         clearItemFields();
         closeSectionSheet();
       }
@@ -268,6 +275,13 @@ export const MenuContextProvider = ({ children }) => {
         );
         handleClose();
         toast.success("Item deleted successfully");
+
+        // Decrement the item count in the corresponding menu
+        setMenuItems((prevMenuItems) =>
+          prevMenuItems.map((menu) =>
+            menu._id === menuId ? { ...menu, items: menu.items - 1 } : menu
+          )
+        );
       }
     } catch (error) {
       setLoading(false);

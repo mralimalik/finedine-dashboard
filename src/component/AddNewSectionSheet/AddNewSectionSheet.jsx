@@ -30,6 +30,7 @@ const AddNewSectionSheet = ({}) => {
     setSectionParentId,
     closeSectionSheet,
     editSectionData,
+    setMenuItems
   } = useContext(MenuContext);
 
   // handle input field change
@@ -77,6 +78,13 @@ const AddNewSectionSheet = ({}) => {
       console.log("API Response:", response.data.data);
 
       updateMenuSections(response.data.data);
+
+      // Increment the section count in the corresponding menu
+      setMenuItems((prevMenuItems) =>
+        prevMenuItems.map((menu) =>
+          menu._id === menuId ? { ...menu, sections: menu.sections + 1 } : menu
+        )
+      );
       // Reset form on success
       setFormData({ name: "", image: null, parentId: null });
       toast.success(`${formData.name} Section added`);

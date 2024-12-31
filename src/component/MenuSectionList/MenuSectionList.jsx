@@ -12,7 +12,7 @@ import { IoMdMore } from "react-icons/io";
 import { baseUrl } from "../../const/constants.js";
 import axios from "axios";
 import { toast } from "react-toastify";
-const MenuSectionList = ({ sectionData, subSections, items,  }) => {
+const MenuSectionList = ({ sectionData, subSections, items }) => {
   // to show the expanded list
   const [isExpanded, setIsExpanded] = useState(false); // State for expansion
   // to handle the section active
@@ -25,7 +25,7 @@ const MenuSectionList = ({ sectionData, subSections, items,  }) => {
   const menuRef = useRef(null);
 
   // seting menu section after delete
-  const { setMenuSectionsData } = useContext(MenuContext);
+  const { setMenuSectionsData, setMenuItems } = useContext(MenuContext);
   const { setLoading } = useContext(AuthContext);
   // to open edit section and update the active toggle
   const { openEditSectionSheet, updateActiveSection } = useContext(MenuContext);
@@ -67,6 +67,14 @@ const MenuSectionList = ({ sectionData, subSections, items,  }) => {
         // Update the menuSectionsData by removing the deleted section
         setMenuSectionsData((prev) => removeSection(prev, sectionId));
 
+        // Increment the section count in the corresponding menu
+        setMenuItems((prevMenuItems) =>
+          prevMenuItems.map((menu) =>
+            menu._id === menuId
+              ? { ...menu, sections: menu.sections - 1 }
+              : menu
+          )
+        );
         handleClose(); // Close any open modals or UI elements
         toast.success("Section deleted successfully");
       }

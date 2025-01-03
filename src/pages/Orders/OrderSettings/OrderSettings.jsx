@@ -15,26 +15,6 @@ const OrderSettings = () => {
   const { orderSettings, setOrderSettings } = useContext(OrderContext);
 
   const [activeTab, setActiveTab] = useState("dineIn");
-  // const [orderSettings, setOrderSettings] = useState(null);
-
-  // const getOrderSettings = async () => {
-  //   try {
-  //     const url = `http://localhost:3000/order/settings/${selectedVenue._id}`;
-  //     const response = await axios.get(url);
-
-  //     if (response.status === 200) {
-  //       setOrderSettings(response.data?.data || {});
-  //       console.log(response.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching order settings:", error);
-  //   } finally {
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getOrderSettings();
-  // }, [selectedVenue]);
 
   return (
     <div>
@@ -137,9 +117,35 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
           }
         />
       </div>
+      <div className="flex justify-between items-center">
+        <h3 className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}>Card Payment</h3>
+        <SwitchButton
+          isActive={dinInsettingsData?.paymentOptions?.cardPayment}
+          onToggle={() =>
+            handleToggle(
+              "paymentOptions.cardPayment",
+              !dinInsettingsData?.paymentOptions?.cardPayment
+            )
+          }
+          disabled={!dinInsettingsData?.paymentEnabled}
+        />
+      </div>
+      <div className="flex justify-between items-center">
+        <h3 className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}>Cash Payment</h3>
+        <SwitchButton
+          isActive={dinInsettingsData?.paymentOptions?.cashPayment}
+          onToggle={() =>
+            handleToggle(
+              "paymentOptions.cashPayment",
+              !dinInsettingsData?.paymentOptions?.cashPayment
+            )
+          }
+          disabled={!dinInsettingsData?.paymentEnabled}
+        />
+      </div>
       <div className="w-full h-[1px] bg-gray-300"></div>
 
-      <div className="flex justify-between items-center ">
+      {/* <div className="flex justify-between items-center ">
         <h3>Accept Tip %</h3>
         <SwitchButton
           isActive={dinInsettingsData?.tipEnabled}
@@ -148,7 +154,7 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
           }
         />
       </div>
-      <ReuseTextField placeholder={"%5"} className={"w-32"} />
+      <ReuseTextField placeholder={"%5"} className={"w-32"} /> */}
       <div className="flex justify-end items-center">
         <button className=" create-menu-button w-fit !px-8">Save</button>
       </div>
@@ -215,9 +221,35 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
           }
         />
       </div>
+      <div className="flex justify-between items-center">
+        <h3 className={deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"}>Card Payment</h3>
+        <SwitchButton
+          isActive={deliverysettingsData?.paymentOptions?.cardPayment}
+          onToggle={() =>
+            handleToggle(
+              "paymentOptions.cardPayment",
+              !deliverysettingsData?.paymentOptions?.cardPayment
+            )
+          }
+          disabled={!deliverysettingsData?.paymentEnabled}
+        />
+      </div>
+      <div className="flex justify-between items-center">
+        <h3 className={deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"}>Cash Payment</h3>
+        <SwitchButton
+          isActive={deliverysettingsData?.paymentOptions?.cashPayment}
+          onToggle={() =>
+            handleToggle(
+              "paymentOptions.cashPayment",
+              !deliverysettingsData?.paymentOptions?.cashPayment
+            )
+          }
+          disabled={!deliverysettingsData?.paymentEnabled}
+        />
+      </div>
       <div className="w-full h-[1px] bg-gray-300"></div>
 
-      <div className="flex justify-between items-center ">
+      {/* <div className="flex justify-between items-center ">
         <h3>Accept Tip %</h3>
         <SwitchButton
           isActive={deliverysettingsData?.tipEnabled}
@@ -226,7 +258,7 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
           }
         />
       </div>
-      <ReuseTextField placeholder={"%5"} className={"w-32"} />
+      <ReuseTextField placeholder={"%5"} className={"w-32"} /> */}
       <div className="flex justify-end items-center">
         <button className=" create-menu-button w-fit !px-8">Save</button>
       </div>

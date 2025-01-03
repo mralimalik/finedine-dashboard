@@ -1,13 +1,15 @@
 import React from "react";
 import "./SwitchButton.css";
-const SwitchButton = ({ isActive, onToggle }) => {
+
+const SwitchButton = ({ isActive, onToggle, disabled }) => {
   return (
     <div>
-      <label className="switch">
+      <label className={`switch ${disabled ? "switch-disabled" : ""}`}>
         <input
           type="checkbox"
           checked={isActive}
-          onChange={onToggle} 
+          onChange={onToggle}
+          disabled={disabled}
         />
         <span className="slider"></span>
       </label>

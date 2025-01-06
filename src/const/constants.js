@@ -23,4 +23,5 @@ export const baseUrl = 'https://finedine-backend.vercel.app';
     DELIVERY: "On Delivery",
     COMPLETED: "Completed",
     CANCELLED: "Cancelled",
+    REFUNDED:"Refunded"
   };

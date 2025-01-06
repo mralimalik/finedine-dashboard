@@ -63,6 +63,9 @@ export default OrderSettings;
 const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
   const { selectedVenue, setLoading } = useContext(AuthContext);
 
+  // Ensure paymentOptions is an object
+  const paymentOptions = dinInsettingsData?.paymentOptions || {};
+
   const handleToggle = async (type, value) => {
     try {
       setLoading(true);
@@ -71,6 +74,7 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
       const updateData = {
         [type]: value,
       };
+      console.log(updateData);
 
       // Send update request to backend
       const url = `${baseUrl}/order/settings/${selectedVenue._id}`;
@@ -83,10 +87,9 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
           },
         }
       );
-
-      console.log(response.data.data);
-
-      setOrderSettings(response.data.data);
+      if (response.status === 200) {
+        setOrderSettings(response.data.data);
+      }
     } catch (error) {
       toast.error("Something went wrong");
 
@@ -118,26 +121,34 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
         />
       </div>
       <div className="flex justify-between items-center">
-        <h3 className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}>Card Payment</h3>
+        <h3
+          className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}
+        >
+          Card Payment
+        </h3>
         <SwitchButton
-          isActive={dinInsettingsData?.paymentOptions?.cardPayment}
+          isActive={paymentOptions.cardPayment}
           onToggle={() =>
             handleToggle(
               "paymentOptions.cardPayment",
-              !dinInsettingsData?.paymentOptions?.cardPayment
+              !paymentOptions.cardPayment
             )
           }
           disabled={!dinInsettingsData?.paymentEnabled}
         />
       </div>
       <div className="flex justify-between items-center">
-        <h3 className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}>Cash Payment</h3>
+        <h3
+          className={dinInsettingsData?.paymentEnabled ? "" : "text-gray-400"}
+        >
+          Cash Payment
+        </h3>
         <SwitchButton
-          isActive={dinInsettingsData?.paymentOptions?.cashPayment}
+          isActive={paymentOptions.cashPayment}
           onToggle={() =>
             handleToggle(
               "paymentOptions.cashPayment",
-              !dinInsettingsData?.paymentOptions?.cashPayment
+              !paymentOptions.cashPayment
             )
           }
           disabled={!dinInsettingsData?.paymentEnabled}
@@ -165,6 +176,9 @@ const DineInOrderSettings = ({ dinInsettingsData, setOrderSettings }) => {
 const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
   const { selectedVenue, setLoading } = useContext(AuthContext);
 
+  // Ensure paymentOptions is an object
+  const paymentOptions = deliverysettingsData?.paymentOptions || {};
+
   const handleToggle = async (type, value) => {
     try {
       setLoading(true);
@@ -185,10 +199,11 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
           },
         }
       );
+      if (response.status === 200) {
+        console.log(response.data.data);
 
-      console.log(response.data.data);
-
-      setOrderSettings(response.data.data);
+        setOrderSettings(response.data.data);
+      }
     } catch (error) {
       toast.error("Something went wrong");
       console.error("Error updating dine-in settings:", error);
@@ -222,26 +237,38 @@ const DeliveryOrderSettings = ({ deliverysettingsData, setOrderSettings }) => {
         />
       </div>
       <div className="flex justify-between items-center">
-        <h3 className={deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"}>Card Payment</h3>
+        <h3
+          className={
+            deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"
+          }
+        >
+          Card Payment
+        </h3>
         <SwitchButton
-          isActive={deliverysettingsData?.paymentOptions?.cardPayment}
+          isActive={paymentOptions.cardPayment}
           onToggle={() =>
             handleToggle(
               "paymentOptions.cardPayment",
-              !deliverysettingsData?.paymentOptions?.cardPayment
+              !paymentOptions.cardPayment
             )
           }
           disabled={!deliverysettingsData?.paymentEnabled}
         />
       </div>
       <div className="flex justify-between items-center">
-        <h3 className={deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"}>Cash Payment</h3>
+        <h3
+          className={
+            deliverysettingsData?.paymentEnabled ? "" : "text-gray-400"
+          }
+        >
+          Cash Payment
+        </h3>
         <SwitchButton
-          isActive={deliverysettingsData?.paymentOptions?.cashPayment}
+          isActive={paymentOptions.cashPayment}
           onToggle={() =>
             handleToggle(
               "paymentOptions.cashPayment",
-              !deliverysettingsData?.paymentOptions?.cashPayment
+              !paymentOptions.cashPayment
             )
           }
           disabled={!deliverysettingsData?.paymentEnabled}

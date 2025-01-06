@@ -11,6 +11,9 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
 import { statusEnum } from "../../../../const/constants.js";
+import { apiurl } from "../../../../../../frontend-menu/src/constants/apiconst.js";
+import axios from "axios";
+import { toast } from "react-toastify";
 const OrderDetails = ({ onClose, onDelete }) => {
   // to show more items or not
   const [showMore, setShowMore] = useState(false);
@@ -26,6 +29,7 @@ const OrderDetails = ({ onClose, onDelete }) => {
     updateOrderStatus,
     allOrders,
     updateOrderSummary,
+    setAllOrders,
   } = useContext(OrderContext);
   const { setLoading } = useContext(AuthContext);
 
@@ -118,6 +122,7 @@ const OrderDetails = ({ onClose, onDelete }) => {
     doc.save(`Order-${orderDetails?.orderId}.pdf`);
   };
 
+  // handle order close
   const handleOrderClose = async () => {
     let orderStatus;
     if (orderDetails.status === "WAITING") {
@@ -135,6 +140,7 @@ const OrderDetails = ({ onClose, onDelete }) => {
     }
   };
 
+  // handle cancelling the order
   const handleOrderCancel = async () => {
     await updateOrderStatus("CANCELLED", orderDetails._id, setLoading);
     onClose();
@@ -166,6 +172,32 @@ const OrderDetails = ({ onClose, onDelete }) => {
       }
     }
     return ""; // default case, if no condition matches
+  };
+
+  // refund order when tap on refund
+  const refundOrder = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.put(
+        `${apiurl}order/refund/${selectedOrder?.paymentId}`,
+        {}
+      );
+      if (response.status === 200) {
+        setAllOrders((prevOrders) => {
+          // Remove the order from the list if the status is CANCELLED or COMPLETED
+          return prevOrders.filter((order) => order._id !== selectedOrder?._id);
+        });
+
+        toast.success("Payment refunded");
+        onClose();
+      }
+    } catch (e) {
+      console.log("error refund", e);
+
+      toast.error("Error refunding payment");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -322,10 +354,17 @@ const OrderDetails = ({ onClose, onDelete }) => {
               )} */}
 
             <CustomButton buttonText={"Print"} onClick={generatePDF} />
+            {selectedOrder?.paymentMethod !== "CASH" &&
+              selectedOrder?.status !== "REFUNDED" &&
+              selectedOrder?.status !== "COMPLETED" &&
+              selectedOrder?.status !== "CANCELLED" && (
+                <CustomButton buttonText={"Refund"} onClick={refundOrder} />
+              )}
           </div>
           <div className="flex">
             {orderDetails?.status !== "COMPLETED" &&
-              orderDetails?.status !== "CANCELLED" && (
+              orderDetails?.status !== "CANCELLED" &&
+              selectedOrder?.status !== "REFUNDED" && (
                 <CustomButton
                   buttonText={"Cancel Order"}
                   onClick={handleOrderCancel}
@@ -333,7 +372,8 @@ const OrderDetails = ({ onClose, onDelete }) => {
               )}
 
             {orderDetails?.status !== "COMPLETED" &&
-              orderDetails?.status !== "CANCELLED" && (
+              orderDetails?.status !== "CANCELLED" &&
+              selectedOrder?.status !== "REFUNDED" && (
                 <CustomButton
                   onClick={handleOrderClose}
                   buttonText={getButtonText()}

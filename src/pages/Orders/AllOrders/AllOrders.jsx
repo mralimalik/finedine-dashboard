@@ -40,6 +40,7 @@ const AllOrders = () => {
     UpdatedTime: true,
     SentTime: false,
     Totals: true,
+    Payment: true,
   });
 
   const [showOrderDetails, setShowOrderDetails] = useState(false);
@@ -214,6 +215,10 @@ export const OrdersTable = ({
       setSortOrder("desc");
     }
   };
+  const capitalizeFirstLetter = (str) => {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   return (
     <div className="overflow-x-auto my-3">
@@ -241,6 +246,8 @@ export const OrdersTable = ({
               </th>
             </th>
             {checkedItems.Status && <th className="p-2 text-left">Status</th>}
+            {checkedItems.Payment && <th className="p-2 text-left">Payment</th>}
+
             {checkedItems.Type && <th className="p-2 text-left">Type</th>}
             {checkedItems.Table && <th className="p-2 text-left">Table</th>}
             {checkedItems.UpdatedTime && (
@@ -295,6 +302,15 @@ export const OrdersTable = ({
                     </span>
                   </td>
                 )}
+                {checkedItems.Payment && (
+                  <td className="p-2">
+                    <span className=" py-1 px-2 rounded">
+                      {order.paymentMethod === "CARD"
+                        ? capitalizeFirstLetter(order.paymentStatus) // Capitalize only the first letter
+                        : ""}
+                    </span>
+                  </td>
+                )}
 
                 {checkedItems.Type && (
                   <td className="p-2">
@@ -316,7 +332,6 @@ export const OrdersTable = ({
                     })}
                   </td>
                 )}
-
                 {checkedItems.SentTime && (
                   <td className="p-2">
                     {formatDistanceToNow(new Date(order.createdAt), {

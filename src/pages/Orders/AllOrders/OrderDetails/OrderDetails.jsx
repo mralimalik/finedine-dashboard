@@ -11,7 +11,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { AuthContext } from "../../../../context/AuthContext.jsx";
 import { statusEnum } from "../../../../const/constants.js";
-import { apiurl } from "../../../../../../frontend-menu/src/constants/apiconst.js";
+import { baseUrl } from "../../../../const/constants.js";
 import axios from "axios";
 import { toast } from "react-toastify";
 const OrderDetails = ({ onClose, onDelete }) => {
@@ -179,7 +179,7 @@ const OrderDetails = ({ onClose, onDelete }) => {
     try {
       setLoading(true);
       const response = await axios.put(
-        `${apiurl}order/refund/${selectedOrder?.paymentId}`,
+        `${baseUrl}/order/refund/${selectedOrder?.paymentId}`,
         {}
       );
       if (response.status === 200) {

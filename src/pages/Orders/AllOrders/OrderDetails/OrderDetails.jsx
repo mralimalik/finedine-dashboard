@@ -366,8 +366,10 @@ const OrderDetails = ({ onClose, onDelete }) => {
               orderDetails?.status !== "CANCELLED" &&
               selectedOrder?.status !== "REFUNDED" && (
                 <CustomButton
-                  buttonText={"Cancel Order"}
-                  onClick={handleOrderCancel}
+                  buttonText={selectedOrder?.paymentMethod === "CASH"?"Cancel Order":"Refund Order" }
+                  onClick={()=>{
+                    selectedOrder?.paymentMethod === "CASH"?handleOrderCancel():refundOrder();
+                  }}
                 />
               )}
 
